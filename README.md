@@ -2,7 +2,7 @@
 CVWO assignment to make a simple web forum
 
 ## TODO
-- [ ] set up database
+- [x] set up database
 - [ ] do architecture
 - [ ] figure out golang backend
 - [ ] build first endpoint
