@@ -9,11 +9,7 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/forumuser/", routes.ForumUserHandler)
-	mux.HandleFunc("/category/", routes.CategoryHandler)
-	mux.HandleFunc("/post/", routes.PostHandler)
-	mux.HandleFunc("/comment/post/", routes.PostCommentHandler)
-	mux.HandleFunc("/comment/", routes.CommentHandler)
+	routes.CreateRoutes(mux)
 	fmt.Println("starting server")
 	http.ListenAndServe(":54321", mux)
 }
