@@ -1,6 +1,7 @@
 import { Layout } from "antd";
 import Head from "next/head";
 import React from "react";
+import { ICategories } from "../../interfaces/api";
 import CategorySidebar from "./CategorySidebar";
 import HeaderComponent from "./Header";
 
@@ -10,7 +11,7 @@ interface IProps {
     body?: React.ReactNode;
 }
 
-const ForumLayout: React.FC = (props: IProps) => {
+const ForumLayout: React.FC<IProps> = (props: IProps) => {
     return (
         <>
             <Head>
@@ -23,7 +24,7 @@ const ForumLayout: React.FC = (props: IProps) => {
                     name="viewport"
                     content="width=device-width, initial-scale=1"
                 />
-                <link rel="icon" href="/favicon.ico" />
+                {/* <link rel="icon" href="/favicon.ico" /> */}
             </Head>
             <Layout>
                 <Header style={{ backgroundColor: "var(--forum-white)" }}>

@@ -4,7 +4,11 @@ import { getCategories } from "../../api";
 import { useEffect, useState } from "react";
 import { ICategories } from "../../interfaces/api";
 
-const Category = () => {
+interface IProps {
+    // categories: ICategories[];
+}
+
+const Category: React.FC<IProps> = (props: IProps) => {
     // const [categories, setCategories] = useState({});
     const router = useRouter();
     const id = router.query.id as string;
@@ -28,8 +32,8 @@ const Category = () => {
 };
 
 export const getStaticPaths = async () => {
-    const categories = await getCategories();
-    const paths = categories.data.map((data: ICategories) => {
+    const categories: ICategories[] = await getCategories();
+    const paths = categories.map((data: ICategories) => {
         return {
             params: {
                 category: data.category,

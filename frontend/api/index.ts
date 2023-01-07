@@ -3,7 +3,8 @@ const axios = require("axios");
 
 export const Get = async (path: string) => {
     const res = await axios.get(`${host}${path}`);
-    return res;
+    // error handling somewhere
+    return res.data;
 };
 
 export const getCategories = async () => {
