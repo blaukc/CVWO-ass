@@ -2,7 +2,6 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"regexp"
 
@@ -10,14 +9,16 @@ import (
 )
 
 var (
-	getUserRe        = regexp.MustCompile(`^\/forumuser\/.+$`)
-	getCommentRe     = regexp.MustCompile(`^\/comment\/.+$`)
-	getPostCommentRe = regexp.MustCompile(`^\/comment\/post\/.+$`)
-	getCategoryRe    = regexp.MustCompile(`^\/category\/$`)
+	getUserRe          = regexp.MustCompile(`^\/forumuser\/.+$`)
+	getCommentRe       = regexp.MustCompile(`^\/comment\/.+$`)
+	getCategoryPostsRe = regexp.MustCompile(`^\/post\/.+$`)
+	getPostCommentsRe  = regexp.MustCompile(`^\/comment\/post\/.+$`)
+	getCategoryRe      = regexp.MustCompile(`^\/category\/$`)
 )
 
 func ForumUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	switch {
 	// GET USER
 	case r.Method == http.MethodGet && getUserRe.MatchString(r.URL.Path):
@@ -44,7 +45,6 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodGet && getCategoryRe.MatchString(r.URL.Path):
 		res := api.GetCategories(w, r)
 		jsonRes, _ := json.Marshal(res)
-		fmt.Println(res, jsonRes)
 		w.Write(jsonRes)
 		return
 	default:
@@ -52,13 +52,40 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-func PostHandler(w http.ResponseWriter, r *http.Request) {}
+func PostHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	switch {
+	// GET ALL POSTS FROM CATEGORY
+	case r.Method == http.MethodGet && getCategoryPostsRe.MatchString(r.URL.Path):
+		res := api.GetCategoryPosts(w, r)
+		jsonRes, _ := json.Marshal(res)
+		w.Write(jsonRes)
+		return
+	// // GET POST
+	// case r.Method == http.MethodGet && getUserRe.MatchString(r.URL.Path):
+	// 	api.GetUser(w, r)
+	// 	return
+	// // PATCH POST
+	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
+	// 	api.PatchUser(w, r)
+	// 	return
+	// // CREATE POST
+	// case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
+	// 	api.PostUser(w, r)
+	// 	return
+	default:
+		http.NotFound(w, r)
+		return
+	}
+}
 
 func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	switch {
 	// GET COMMENTS BY POST
-	case r.Method == http.MethodGet && getPostCommentRe.MatchString(r.URL.Path):
+	case r.Method == http.MethodGet && getPostCommentsRe.MatchString(r.URL.Path):
 		api.GetCommentsByPost(w, r)
 		return
 	default:
@@ -69,21 +96,22 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 
 func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
-	switch {
-	// GET COMMENT
-	case r.Method == http.MethodGet && getUserRe.MatchString(r.URL.Path):
-		api.GetUser(w, r)
-		return
-	// PATCH COMMENT
-	case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
-		api.PatchUser(w, r)
-		return
-	// CREATE COMMENT
-	case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
-		api.PostUser(w, r)
-		return
-	default:
-		http.NotFound(w, r)
-		return
-	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	// switch {
+	// // GET COMMENT
+	// case r.Method == http.MethodGet && getUserRe.MatchString(r.URL.Path):
+	// 	api.GetUser(w, r)
+	// 	return
+	// // PATCH COMMENT
+	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
+	// 	api.PatchUser(w, r)
+	// 	return
+	// // CREATE COMMENT
+	// case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
+	// 	api.PostUser(w, r)
+	// 	return
+	// default:
+	// 	http.NotFound(w, r)
+	// 	return
+	// }
 }
