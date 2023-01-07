@@ -1,4 +1,4 @@
-import ForumLayout from "../../components/layout";
+import ForumLayout from "../../components/layout/ForumLayout";
 import { useRouter } from "next/router";
 import { getCategories } from "../../api";
 import { useEffect, useState } from "react";

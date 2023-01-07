@@ -3,7 +3,7 @@ import HomeLayout from "../components/layout/HomeLayout";
 const Home = (): JSX.Element => {
     return (
         <>
-            <div>hello main page</div>
+            <div>hello about</div>
             <div></div>
             <HomeLayout />
         </>
