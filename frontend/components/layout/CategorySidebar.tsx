@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    AppstoreOutlined,
-    CalendarOutlined,
-    LinkOutlined,
-    MailOutlined,
-    SettingOutlined,
-} from "@ant-design/icons";
-import { Menu } from "antd";
-import type { MenuProps, MenuTheme } from "antd/es/menu";
+import { List } from "antd";
 import { ICategories } from "../../interfaces/api";
 import { getCategories } from "../../api";
 import Link from "next/link";
@@ -33,9 +25,8 @@ const CategorySidebar: React.FC<IProps> = (props: IProps) => {
 
     return (
         <>
-            <Menu
+            <List
                 style={{ backgroundColor: "var(--forum-white)" }}
-                defaultSelectedKeys={[categoryPath]}
                 items={categories?.map((category) => ({
                     key: category.category,
                     label: (
