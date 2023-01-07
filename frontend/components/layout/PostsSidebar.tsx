@@ -17,7 +17,7 @@ interface IProps {
     // categories: ICategories[];
 }
 
-const CategorySidebar: React.FC<IProps> = (props: IProps) => {
+const PostsSidebar: React.FC<IProps> = (props: IProps) => {
     const [categories, setCategories] = useState<ICategories[]>([]);
     const router = useRouter();
     const categoryPath = router?.query?.category as string;
@@ -54,4 +54,4 @@ const CategorySidebar: React.FC<IProps> = (props: IProps) => {
     );
 };
 
-export default CategorySidebar;
+export default PostsSidebar;

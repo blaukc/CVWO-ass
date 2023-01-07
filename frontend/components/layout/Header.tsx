@@ -25,18 +25,6 @@ const items: MenuProps["items"] = [
         key: "about",
         icon: <AppstoreOutlined />,
     },
-    {
-        label: (
-            <a
-                href="https://ant.design"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Navigation Four - Link
-            </a>
-        ),
-        key: "alipay",
-    },
 ];
 
 const getSelectedHeader = (router: NextRouter): string => {

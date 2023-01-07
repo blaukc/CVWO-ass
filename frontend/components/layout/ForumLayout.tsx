@@ -4,6 +4,7 @@ import React from "react";
 import { ICategories } from "../../interfaces/api";
 import CategorySidebar from "./CategorySidebar";
 import HeaderComponent from "./Header";
+import PostsSidebar from "./PostsSidebar";
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -35,7 +36,9 @@ const ForumLayout: React.FC<IProps> = (props: IProps) => {
                         <CategorySidebar />
                     </Sider>
                     <Layout>
-                        <Sider>Sider</Sider>
+                        <Sider>
+                            <PostsSidebar />
+                        </Sider>
                         <Content>{props?.body}</Content>
                     </Layout>
                 </Layout>
