@@ -37,3 +37,4 @@ CREATE TABLE Comments (
 --
 
 ALTER TABLE posts ADD description TEXT;
+ALTER TABLE posts ALTER COLUMN description SET NOT NULL;
