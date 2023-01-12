@@ -34,14 +34,14 @@ const ForumLayout: React.FC<IProps> = (props: IProps) => {
                     <HeaderComponent />
                 </Header>
                 <Layout>
-                    <Sider>
+                    <Sider width={"15%"}>
                         <CategorySidebar
                             category={category}
                             setCategory={setCategory}
                         />
                     </Sider>
                     <Layout>
-                        <Sider>
+                        <Sider width={"25%"}>
                             <PostsSidebar
                                 category={category}
                                 setCategory={setCategory}

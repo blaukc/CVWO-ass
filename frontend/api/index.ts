@@ -7,6 +7,12 @@ export const Get = async (path: string) => {
     return res.data;
 };
 
+export const Post = async (path: string, body: any) => {
+    const res = await axios.post(`${host}${path}`, body);
+    // error handling somewhere
+    return res.data;
+};
+
 export const getCategories = async () => {
     const categories = await Get("/category/");
     return categories;
@@ -15,4 +21,10 @@ export const getCategories = async () => {
 export const getCategoryPosts = async (categoryName: string) => {
     const posts = await Get(`/post/category/${categoryName}`);
     return posts;
+};
+
+export const createPost = async (values: any) => {
+    console.log(values);
+    const res = await Post(`/post/`, JSON.stringify(values));
+    return res;
 };

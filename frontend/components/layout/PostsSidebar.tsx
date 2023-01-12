@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { List } from "antd";
+import { List, Row } from "antd";
 import { IPosts } from "../../interfaces/api";
 import { getCategoryPosts } from "../../api";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import CreatePostModal from "../CreatePostModal";
 
 interface IProps {
     category: string | undefined;
@@ -29,11 +28,18 @@ const CategorySidebar: React.FC<IProps> = (props: IProps) => {
     return (
         <>
             <List
-                style={{ backgroundColor: "var(--forum-white)" }}
+                header={<CreatePostModal />}
+                style={{
+                    backgroundColor: "var(--forum-white)",
+                    height: "100%",
+                }}
                 dataSource={posts}
                 renderItem={(post) => (
                     <List.Item key={post?.id}>
-                        <List.Item.Meta title={post?.title} />
+                        <List.Item.Meta
+                            title={post?.title}
+                            description={post?.description}
+                        />
                     </List.Item>
                 )}
             />
