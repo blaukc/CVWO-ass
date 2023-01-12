@@ -10,7 +10,18 @@ import (
 )
 
 func GetCategoryPosts(w http.ResponseWriter, r *http.Request) []models.Posts {
-	categoryId := path.Base(r.URL.Path)
+	categoryName := path.Base(r.URL.Path)
+	fmt.Println(categoryName)
+	var categoryRes []models.Posts
+
+	dbGetCategory := database.Connect()
+
+	err := dbGetCategory.Select(&categoryRes, "SELECT id FROM categories WHERE category=$1", categoryName)
+	if err != nil {
+		panic(err)
+	}
+	database.Disconnect(dbGetCategory)
+	categoryId := categoryRes[0].Id
 
 	db := database.Connect()
 

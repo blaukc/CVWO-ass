@@ -1,57 +1,44 @@
 import React, { useEffect, useState } from "react";
-import {
-    AppstoreOutlined,
-    CalendarOutlined,
-    LinkOutlined,
-    MailOutlined,
-    SettingOutlined,
-} from "@ant-design/icons";
-import { Menu } from "antd";
-import type { MenuProps, MenuTheme } from "antd/es/menu";
-import { ICategories } from "../../interfaces/api";
-import { getCategories } from "../../api";
+import { List } from "antd";
+import { IPosts } from "../../interfaces/api";
+import { getCategoryPosts } from "../../api";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 interface IProps {
-    // categories: ICategories[];
+    category: string | undefined;
+    setCategory: (category: any) => void;
 }
 
-const PostsSidebar: React.FC<IProps> = (props: IProps) => {
-    const [categories, setCategories] = useState<ICategories[]>([]);
-    const router = useRouter();
-    const categoryPath = router?.query?.category as string;
+const CategorySidebar: React.FC<IProps> = (props: IProps) => {
+    const [posts, setPosts] = useState<IPosts[]>([]);
 
-    const updateCategoriesState = async () => {
-        const categories = await getCategories();
-        setCategories(categories);
+    const updatePostsState = async () => {
+        if (!props?.category) {
+            return;
+        }
+        console.log(props?.category);
+        const posts = await getCategoryPosts(props?.category);
+        setPosts(posts ? posts : []);
     };
 
     useEffect(() => {
-        updateCategoriesState();
-    }, []);
+        updatePostsState();
+    }, [props?.category]);
 
     return (
         <>
-            <Menu
+            <List
                 style={{ backgroundColor: "var(--forum-white)" }}
-                defaultSelectedKeys={[categoryPath]}
-                items={categories?.map((category) => ({
-                    key: category.category,
-                    label: (
-                        <Link
-                            href={`/${category.category}`}
-                            style={{ textTransform: "capitalize" }}
-                            shallow={true}
-                        >
-                            {category.category}
-                        </Link>
-                    ),
-                    title: category.category,
-                }))}
+                dataSource={posts}
+                renderItem={(post) => (
+                    <List.Item key={post?.id}>
+                        <List.Item.Meta title={post?.title} />
+                    </List.Item>
+                )}
             />
         </>
     );
 };
 
-export default PostsSidebar;
+export default CategorySidebar;

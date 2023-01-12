@@ -1,6 +1,6 @@
 import { Layout } from "antd";
 import Head from "next/head";
-import React from "react";
+import React, { useState } from "react";
 import { ICategories } from "../../interfaces/api";
 import CategorySidebar from "./CategorySidebar";
 import HeaderComponent from "./Header";
@@ -13,6 +13,8 @@ interface IProps {
 }
 
 const ForumLayout: React.FC<IProps> = (props: IProps) => {
+    const [category, setCategory] = useState("");
+
     return (
         <>
             <Head>
@@ -33,11 +35,17 @@ const ForumLayout: React.FC<IProps> = (props: IProps) => {
                 </Header>
                 <Layout>
                     <Sider>
-                        <CategorySidebar />
+                        <CategorySidebar
+                            category={category}
+                            setCategory={setCategory}
+                        />
                     </Sider>
                     <Layout>
                         <Sider>
-                            <PostsSidebar />
+                            <PostsSidebar
+                                category={category}
+                                setCategory={setCategory}
+                            />
                         </Sider>
                         <Content>{props?.body}</Content>
                     </Layout>

@@ -5,7 +5,7 @@ CVWO assignment to make a simple web forum
 ## TODO
 
 -   [x] set up database
--   [ ] do architecture/part1
+-   [x] do architecture/part1
 -   [x] figure out golang backend
 -   [x] build first endpoint
 -   [x] build some frontend
