@@ -13,6 +13,6 @@ export const getCategories = async () => {
 };
 
 export const getCategoryPosts = async (categoryName: string) => {
-    const posts = await Get(`/post/${categoryName}`);
+    const posts = await Get(`/post/category/${categoryName}`);
     return posts;
 };

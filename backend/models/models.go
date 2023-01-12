@@ -20,6 +20,7 @@ type Posts struct {
 	Date_Created time.Time `json:"date_created"`
 	Date_Updated time.Time `json:"date_updated"`
 	Title        string    `json:"title"`
+	Description  string    `json:"description"`
 }
 
 type Comments struct {

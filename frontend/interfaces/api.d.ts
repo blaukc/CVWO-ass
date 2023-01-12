@@ -16,6 +16,7 @@ export interface IPosts {
     date_created: string;
     date_updated: string;
     title: string;
+    description: string;
 }
 
 export interface IComments {

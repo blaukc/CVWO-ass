@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"path"
@@ -50,6 +51,22 @@ func PatchPost(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(w)
 }
 
-func PostPost(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(w)
+func CreatePost(w http.ResponseWriter, r *http.Request) {
+	var post models.Posts
+	err := json.NewDecoder(r.Body).Decode(&post)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	columns := []string{"poster", "category", "title", "description"}
+	values := []string{post.Poster, post.Category, post.Title, post.Description}
+	table := "posts"
+
+	db := database.Connect()
+
+	database.Insert(db, table, columns, values)
+
+	database.Disconnect(db)
 }

@@ -35,3 +35,5 @@ CREATE TABLE Comments (
 );
 
 --
+
+ALTER TABLE posts ADD description TEXT;

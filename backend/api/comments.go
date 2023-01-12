@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"path"
@@ -37,5 +38,21 @@ func PatchComment(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostComment(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(w)
+	var comment models.Comments
+	err := json.NewDecoder(r.Body).Decode(&comment)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	columns := []string{"commenter", "post", "comment"}
+	values := []string{comment.Commenter, comment.Post, comment.Comment}
+	table := "comments"
+
+	db := database.Connect()
+
+	database.Insert(db, table, columns, values)
+
+	database.Disconnect(db)
 }

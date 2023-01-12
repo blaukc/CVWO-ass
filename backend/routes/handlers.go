@@ -9,9 +9,13 @@ import (
 )
 
 var (
-	getUserRe          = regexp.MustCompile(`^\/forumuser\/.+$`)
-	getCommentRe       = regexp.MustCompile(`^\/comment\/.+$`)
-	getCategoryPostsRe = regexp.MustCompile(`^\/post\/.+$`)
+	getUserRe          = regexp.MustCompile(`^\/forumuser\/$`)
+	getUserSlugRe      = regexp.MustCompile(`^\/forumuser\/.+$`)
+	getCommentRe       = regexp.MustCompile(`^\/comment\/$`)
+	getCommentSlugRe   = regexp.MustCompile(`^\/comment\/.+$`)
+	getPostRe          = regexp.MustCompile(`^\/post\/$`)
+	getPostSlugRe      = regexp.MustCompile(`^\/post\/.+$`)
+	getCategoryPostsRe = regexp.MustCompile(`^\/post\/category\/.+$`)
 	getPostCommentsRe  = regexp.MustCompile(`^\/comment\/post\/.+$`)
 	getCategoryRe      = regexp.MustCompile(`^\/category\/$`)
 )
@@ -21,17 +25,17 @@ func ForumUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	switch {
 	// GET USER
-	case r.Method == http.MethodGet && getUserRe.MatchString(r.URL.Path):
+	case r.Method == http.MethodGet && getUserSlugRe.MatchString(r.URL.Path):
 		api.GetUser(w, r)
 		return
-	// PATCH USER
-	case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
-		api.PatchUser(w, r)
-		return
-	// CREATE USER
-	case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
-		api.PostUser(w, r)
-		return
+	// // PATCH USER
+	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
+	// 	api.PatchUser(w, r)
+	// 	return
+	// // CREATE USER
+	// case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
+	// 	api.PostUser(w, r)
+	// 	return
 	default:
 		http.NotFound(w, r)
 		return
@@ -70,10 +74,10 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
 	// 	api.PatchUser(w, r)
 	// 	return
-	// // CREATE POST
-	// case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
-	// 	api.PostUser(w, r)
-	// 	return
+	// CREATE POST
+	case r.Method == http.MethodPost && getPostRe.MatchString(r.URL.Path):
+		api.CreatePost(w, r)
+		return
 	default:
 		http.NotFound(w, r)
 		return
@@ -97,7 +101,7 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	// switch {
+	switch {
 	// // GET COMMENT
 	// case r.Method == http.MethodGet && getUserRe.MatchString(r.URL.Path):
 	// 	api.GetUser(w, r)
@@ -106,12 +110,12 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
 	// 	api.PatchUser(w, r)
 	// 	return
-	// // CREATE COMMENT
-	// case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
-	// 	api.PostUser(w, r)
-	// 	return
-	// default:
-	// 	http.NotFound(w, r)
-	// 	return
-	// }
+	// CREATE COMMENT
+	case r.Method == http.MethodPost && getCommentRe.MatchString(r.URL.Path):
+		api.PostComment(w, r)
+		return
+	default:
+		http.NotFound(w, r)
+		return
+	}
 }

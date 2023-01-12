@@ -2,6 +2,7 @@ package database
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -59,13 +60,17 @@ func GetRows(db *sqlx.DB, res any, sqlStatement string) {
 	}
 }
 
-// func Insert(db *sqlx.DB) {
-// 	sqlStatement := `
-// 		INSERT INTO forumusers (name)
-// 		VALUES ($1)
-// 	`
-// 	_, err := db.Exec(sqlStatement, "Lets GO")
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// }
+func Insert(db *sqlx.DB, table string, columns []string, values []string) {
+	columnsParsed := strings.Join(columns, ", ")
+	var valuesWithQuotes []string
+	for _, value := range values {
+		valuesWithQuotes = append(valuesWithQuotes, fmt.Sprintf("'%s'", value))
+	}
+	valuesParsed := strings.Join(valuesWithQuotes, ", ")
+	sqlStatement := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", table, columnsParsed, valuesParsed)
+	fmt.Println(sqlStatement)
+	_, err := db.Exec(sqlStatement)
+	if err != nil {
+		panic(err)
+	}
+}
