@@ -60,7 +60,32 @@ func DeletePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func PatchPost(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(w)
+	postId := path.Base(r.URL.Path)
+	var post models.Posts
+	err := json.NewDecoder(r.Body).Decode(&post)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var columns []string
+	var values []string
+	if post.Title != "" {
+		columns = append(columns, "title")
+		values = append(values, post.Title)
+	}
+	if post.Description != "" {
+		columns = append(columns, "description")
+		values = append(values, post.Description)
+	}
+	table := "posts"
+
+	db := database.Connect()
+
+	database.PatchById(db, table, postId, columns, values)
+
+	database.Disconnect(db)
 }
 
 func CreatePost(w http.ResponseWriter, r *http.Request) {

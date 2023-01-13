@@ -76,10 +76,10 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodDelete && getPostSlugRe.MatchString(r.URL.Path):
 		api.DeletePost(w, r)
 		return
-	// // PATCH POST
-	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
-	// 	api.PatchUser(w, r)
-	// 	return
+	// PATCH POST
+	case r.Method == http.MethodPatch && getPostSlugRe.MatchString(r.URL.Path):
+		api.PatchPost(w, r)
+		return
 	// CREATE POST
 	case r.Method == http.MethodPost && getPostRe.MatchString(r.URL.Path):
 		api.CreatePost(w, r)
@@ -118,10 +118,10 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	case r.Method == http.MethodDelete && getCommentSlugRe.MatchString(r.URL.Path):
 		api.DeleteComment(w, r)
 		return
-	// // PATCH COMMENT
-	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
-	// 	api.PatchUser(w, r)
-	// 	return
+	// PATCH COMMENT
+	case r.Method == http.MethodPatch && getCommentSlugRe.MatchString(r.URL.Path):
+		api.PatchComment(w, r)
+		return
 	// CREATE COMMENT
 	case r.Method == http.MethodPost && getCommentRe.MatchString(r.URL.Path):
 		api.PostComment(w, r)

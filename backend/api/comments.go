@@ -53,7 +53,28 @@ func DeleteComment(w http.ResponseWriter, r *http.Request) {
 }
 
 func PatchComment(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(w)
+	commentId := path.Base(r.URL.Path)
+	var comment models.Comments
+	err := json.NewDecoder(r.Body).Decode(&comment)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	var columns []string
+	var values []string
+	if comment.Comment != "" {
+		columns = append(columns, "comment")
+		values = append(values, comment.Comment)
+	}
+	table := "comments"
+
+	db := database.Connect()
+
+	database.PatchById(db, table, commentId, columns, values)
+
+	database.Disconnect(db)
 }
 
 func PostComment(w http.ResponseWriter, r *http.Request) {

@@ -72,6 +72,19 @@ func DeleteById(db *sqlx.DB, table string, id string) {
 	}
 }
 
+func PatchById(db *sqlx.DB, table string, id string, columns []string, values []string) {
+	var valuesWithQuotes []string
+	for i, value := range values {
+		valuesWithQuotes = append(valuesWithQuotes, fmt.Sprintf("%s='%s'", columns[i], value))
+	}
+	updateValues := strings.Join(valuesWithQuotes, ", ")
+	sqlStatement := fmt.Sprintf("UPDATE %s SET %s WHERE id='%s'", table, updateValues, id)
+	fmt.Println(sqlStatement)
+	_, err := db.Exec(sqlStatement)
+	if err != nil {
+		panic(err)
+	}
+}
 func Insert(db *sqlx.DB, table string, columns []string, values []string) {
 	columnsParsed := strings.Join(columns, ", ")
 	var valuesWithQuotes []string
