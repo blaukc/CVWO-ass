@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { List } from "antd";
+import { Col, Divider, List, Row, Typography } from "antd";
 import { IComments, IPosts } from "../../interfaces/api";
 import { getPost, getPostComments } from "../../api";
 import PostComment from "./PostComment";
@@ -7,6 +7,8 @@ import PostComment from "./PostComment";
 interface IProps {
     currentPost: string;
 }
+
+const { Title, Text } = Typography;
 
 const ForumPost: React.FC<IProps> = (props: IProps) => {
     const [post, setPost] = useState<IPosts | null>(null);
@@ -35,38 +37,41 @@ const ForumPost: React.FC<IProps> = (props: IProps) => {
         <>
             {props.currentPost ? (
                 <>
-                    {post?.description}
-                    {comments ? (
-                        <List
-                            itemLayout="vertical"
-                            size="large"
-                            pagination={{
-                                onChange: (page) => {
-                                    console.log(page);
-                                },
-                                pageSize: 10,
-                            }}
-                            dataSource={comments}
-                            footer={
-                                <PostComment
-                                    postId={props.currentPost}
-                                    dummyUpdate={dummyUpdate}
-                                    setDummyUpdate={setDummyUpdate}
-                                />
-                            }
-                            renderItem={(comment) => (
-                                <List.Item key={comment.id}>
-                                    <List.Item.Meta title={comment.commenter} />
-                                    {comment.comment}
-                                </List.Item>
-                            )}
-                        />
-                    ) : (
-                        "no comment../"
-                    )}
+                    <List
+                        itemLayout="vertical"
+                        size="large"
+                        pagination={{
+                            onChange: (page) => {
+                                console.log(page);
+                            },
+                            pageSize: 10,
+                        }}
+                        header={
+                            <>
+                                <Col style={{ marginLeft: 24 }}>
+                                    <Title level={3}>{post?.title}</Title>
+                                    <Text>{post?.description}</Text>
+                                </Col>
+                            </>
+                        }
+                        footer={
+                            <PostComment
+                                postId={props?.currentPost}
+                                dummyUpdate={dummyUpdate}
+                                setDummyUpdate={setDummyUpdate}
+                            />
+                        }
+                        dataSource={comments ? comments : []}
+                        renderItem={(comment) => (
+                            <List.Item key={comment?.id}>
+                                <List.Item.Meta title={comment?.commenter} />
+                                {comment?.comment}
+                            </List.Item>
+                        )}
+                    />
                 </>
             ) : (
-                "nothing"
+                <></>
             )}
         </>
     );
