@@ -72,6 +72,10 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		jsonRes, _ := json.Marshal(res)
 		w.Write(jsonRes)
 		return
+	// DELETE POST
+	case r.Method == http.MethodDelete && getPostSlugRe.MatchString(r.URL.Path):
+		api.DeletePost(w, r)
+		return
 	// // PATCH POST
 	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
 	// 	api.PatchUser(w, r)
@@ -110,6 +114,10 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	// case r.Method == http.MethodGet && getUserRe.MatchString(r.URL.Path):
 	// 	api.GetUser(w, r)
 	// 	return
+	// DELETE COMMENT
+	case r.Method == http.MethodDelete && getCommentSlugRe.MatchString(r.URL.Path):
+		api.DeleteComment(w, r)
+		return
 	// // PATCH COMMENT
 	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
 	// 	api.PatchUser(w, r)

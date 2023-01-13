@@ -3,7 +3,10 @@ import { Form, Modal, Row } from "antd";
 import CreatePostForm from "./CreatePostForm";
 import { createPost } from "../../api";
 
-interface IProps {}
+interface IProps {
+    dummyUpdate: number;
+    setDummyUpdate: (dummyUpdate: number) => void;
+}
 
 const CreatePostModal: React.FC<IProps> = (props: IProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,6 +31,7 @@ const CreatePostModal: React.FC<IProps> = (props: IProps) => {
         const id = "b834bc17-63ea-43ff-a4ab-badc57386b9c";
         createPost({ poster: id, ...values });
         form.resetFields();
+        props.setDummyUpdate(props.dummyUpdate + 1);
     };
 
     return (

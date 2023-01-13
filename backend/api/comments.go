@@ -42,6 +42,16 @@ func GetCommentsByPost(w http.ResponseWriter, r *http.Request) []models.Comments
 	return res
 }
 
+func DeleteComment(w http.ResponseWriter, r *http.Request) {
+	commentId := path.Base(r.URL.Path)
+
+	db := database.Connect()
+
+	database.DeleteById(db, "comments", commentId)
+
+	database.Disconnect(db)
+}
+
 func PatchComment(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(w)
 }

@@ -49,6 +49,16 @@ func GetPost(w http.ResponseWriter, r *http.Request) []models.Posts {
 	return res
 }
 
+func DeletePost(w http.ResponseWriter, r *http.Request) {
+	postId := path.Base(r.URL.Path)
+
+	db := database.Connect()
+
+	database.DeleteById(db, "posts", postId)
+
+	database.Disconnect(db)
+}
+
 func PatchPost(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(w)
 }

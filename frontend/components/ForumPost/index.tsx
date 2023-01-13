@@ -17,7 +17,7 @@ const ForumPost: React.FC<IProps> = (props: IProps) => {
 
     const updatePostState = async () => {
         const post = await getPost(props.currentPost);
-        setPost(post[0]);
+        setPost(post ? post[0] : null);
     };
 
     const updateCommentsState = async () => {

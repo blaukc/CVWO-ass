@@ -60,6 +60,18 @@ func GetRows(db *sqlx.DB, res any, sqlStatement string) {
 	}
 }
 
+func DeleteById(db *sqlx.DB, table string, id string) {
+	sqlStatement := fmt.Sprintf(`
+		DELETE FROM %s
+		WHERE id='%s'
+	`, table, id)
+
+	_, err := db.Exec(sqlStatement)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func Insert(db *sqlx.DB, table string, columns []string, values []string) {
 	columnsParsed := strings.Join(columns, ", ")
 	var valuesWithQuotes []string

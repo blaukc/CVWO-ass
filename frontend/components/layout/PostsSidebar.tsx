@@ -12,6 +12,7 @@ interface IProps {
 
 const CategorySidebar: React.FC<IProps> = (props: IProps) => {
     const [posts, setPosts] = useState<IPosts[]>([]);
+    const [dummyUpdate, setDummyUpdate] = useState<number>(0);
 
     const updatePostsState = async () => {
         if (!props?.category) {
@@ -24,12 +25,17 @@ const CategorySidebar: React.FC<IProps> = (props: IProps) => {
 
     useEffect(() => {
         updatePostsState();
-    }, [props?.category]);
+    }, [props?.category, dummyUpdate]);
 
     return (
         <>
             <List
-                header={<CreatePostModal />}
+                header={
+                    <CreatePostModal
+                        dummyUpdate={dummyUpdate}
+                        setDummyUpdate={setDummyUpdate}
+                    />
+                }
                 style={{
                     backgroundColor: "var(--forum-white)",
                     height: "100%",
