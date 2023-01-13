@@ -66,10 +66,12 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		jsonRes, _ := json.Marshal(res)
 		w.Write(jsonRes)
 		return
-	// // GET POST
-	// case r.Method == http.MethodGet && getUserRe.MatchString(r.URL.Path):
-	// 	api.GetUser(w, r)
-	// 	return
+	// GET POST
+	case r.Method == http.MethodGet && getPostSlugRe.MatchString(r.URL.Path):
+		res := api.GetPost(w, r)
+		jsonRes, _ := json.Marshal(res)
+		w.Write(jsonRes)
+		return
 	// // PATCH POST
 	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
 	// 	api.PatchUser(w, r)
@@ -90,7 +92,9 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	// GET COMMENTS BY POST
 	case r.Method == http.MethodGet && getPostCommentsRe.MatchString(r.URL.Path):
-		api.GetCommentsByPost(w, r)
+		res := api.GetCommentsByPost(w, r)
+		jsonRes, _ := json.Marshal(res)
+		w.Write(jsonRes)
 		return
 	default:
 		http.NotFound(w, r)

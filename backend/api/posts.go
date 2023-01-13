@@ -35,16 +35,18 @@ func GetCategoryPosts(w http.ResponseWriter, r *http.Request) []models.Posts {
 	return res
 }
 
-func GetPost(w http.ResponseWriter, r *http.Request) {
+func GetPost(w http.ResponseWriter, r *http.Request) []models.Posts {
 	postId := path.Base(r.URL.Path)
 
 	db := database.Connect()
 
-	var res []models.ForumUsers
-	database.GetRowById(db, &res, "forumusers", postId)
+	var res []models.Posts
+	database.GetRowById(db, &res, "posts", postId)
 
 	database.Disconnect(db)
 	fmt.Println(res)
+
+	return res
 }
 
 func PatchPost(w http.ResponseWriter, r *http.Request) {

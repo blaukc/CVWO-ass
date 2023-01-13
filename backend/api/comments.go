@@ -21,7 +21,7 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(res)
 }
 
-func GetCommentsByPost(w http.ResponseWriter, r *http.Request) {
+func GetCommentsByPost(w http.ResponseWriter, r *http.Request) []models.Comments {
 	postId := path.Base(r.URL.Path)
 	db := database.Connect()
 
@@ -31,6 +31,7 @@ func GetCommentsByPost(w http.ResponseWriter, r *http.Request) {
 
 	database.Disconnect(db)
 	fmt.Println(res)
+	return res
 }
 
 func PatchComment(w http.ResponseWriter, r *http.Request) {
@@ -48,6 +49,7 @@ func PostComment(w http.ResponseWriter, r *http.Request) {
 
 	columns := []string{"commenter", "post", "comment"}
 	values := []string{comment.Commenter, comment.Post, comment.Comment}
+	fmt.Println(values)
 	table := "comments"
 
 	db := database.Connect()

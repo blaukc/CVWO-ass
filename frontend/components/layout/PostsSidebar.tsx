@@ -7,6 +7,7 @@ import CreatePostModal from "../CreatePostModal";
 interface IProps {
     category: string | undefined;
     setCategory: (category: any) => void;
+    setCurrentPost: (currentPost: string) => void;
 }
 
 const CategorySidebar: React.FC<IProps> = (props: IProps) => {
@@ -35,7 +36,10 @@ const CategorySidebar: React.FC<IProps> = (props: IProps) => {
                 }}
                 dataSource={posts}
                 renderItem={(post) => (
-                    <List.Item key={post?.id}>
+                    <List.Item
+                        key={post?.id}
+                        onClick={() => props.setCurrentPost(post?.id)}
+                    >
                         <List.Item.Meta
                             title={post?.title}
                             description={post?.description}

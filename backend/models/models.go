@@ -26,7 +26,7 @@ type Posts struct {
 type Comments struct {
 	Id           int       `json:"id"`
 	Commenter    string    `json:"commenter"`
-	Post         string    `json:"poster"`
+	Post         string    `json:"post"`
 	Comment      string    `json:"comment"`
 	Date_Created time.Time `json:"date_created"`
 }

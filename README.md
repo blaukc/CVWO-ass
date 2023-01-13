@@ -10,10 +10,11 @@ CVWO assignment to make a simple web forum
 -   [x] build first endpoint
 -   [x] build some frontend
 -   [x] make first link
--   [ ] build category page
--   [ ] build post page
+-   [x] build category page
+-   [x] build post page
 -   [ ] build main page
 -   [ ] endpoints for category page
 -   [ ] endpoints for post page
 -   [ ] build rest of endpoints
 -   [ ] build rest of frontend and link to backend
+-   [ ] endpoint error handling

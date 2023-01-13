@@ -8,7 +8,7 @@ export const Get = async (path: string) => {
 };
 
 export const Post = async (path: string, body: any) => {
-    const res = await axios.post(`${host}${path}`, body);
+    const res = await axios.post(`${host}${path}`, JSON.stringify(body));
     // error handling somewhere
     return res.data;
 };
@@ -18,13 +18,27 @@ export const getCategories = async () => {
     return categories;
 };
 
+export const getPost = async (postId: string) => {
+    const post = await Get(`/post/${postId}`);
+    return post;
+};
+
 export const getCategoryPosts = async (categoryName: string) => {
     const posts = await Get(`/post/category/${categoryName}`);
     return posts;
 };
 
 export const createPost = async (values: any) => {
-    console.log(values);
-    const res = await Post(`/post/`, JSON.stringify(values));
+    const res = await Post(`/post/`, values);
+    return res;
+};
+
+export const getPostComments = async (postId: string) => {
+    const comments = await Get(`/comment/post/${postId}`);
+    return comments;
+};
+
+export const createComment = async (values: any) => {
+    const res = await Post(`/comment/`, values);
     return res;
 };
