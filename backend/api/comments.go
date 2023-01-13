@@ -21,12 +21,20 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(res)
 }
 
-func GetCommentsByPost(w http.ResponseWriter, r *http.Request) []models.Comments {
+func GetCommentsByPost(w http.ResponseWriter, r *http.Request) []models.CommentsWithName {
 	postId := path.Base(r.URL.Path)
 	db := database.Connect()
 
-	var res []models.Comments
-	sqlStatement := fmt.Sprintf("SELECT * FROM comments WHERE post='%s'", postId)
+	var res []models.CommentsWithName
+	sqlStatement := fmt.Sprintf(`
+		SELECT comments.id, comments.commenter, comments.post, comments.comment, comments.date_created, forumusers.name
+		FROM comments 
+		INNER JOIN forumusers
+		ON comments.commenter = forumusers.id
+		WHERE comments.post='%s'
+		ORDER BY date_created`,
+		postId)
+
 	database.GetRows(db, &res, sqlStatement)
 
 	database.Disconnect(db)

@@ -30,3 +30,8 @@ type Comments struct {
 	Comment      string    `json:"comment"`
 	Date_Created time.Time `json:"date_created"`
 }
+
+type CommentsWithName struct {
+	Comments
+	Name string `json:"name"`
+}

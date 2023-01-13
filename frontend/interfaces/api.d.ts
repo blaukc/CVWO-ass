@@ -25,4 +25,5 @@ export interface IComments {
     post: string;
     comment: string;
     date_created: string;
+    name?: string;
 }

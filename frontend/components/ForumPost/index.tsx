@@ -23,6 +23,7 @@ const ForumPost: React.FC<IProps> = (props: IProps) => {
     const updateCommentsState = async () => {
         const comments = await getPostComments(props.currentPost);
         setComments(comments);
+        console.log(comments);
     };
 
     useEffect(() => {
@@ -64,8 +65,10 @@ const ForumPost: React.FC<IProps> = (props: IProps) => {
                         dataSource={comments ? comments : []}
                         renderItem={(comment) => (
                             <List.Item key={comment?.id}>
-                                <List.Item.Meta title={comment?.commenter} />
+                                <List.Item.Meta title={comment?.name} />
                                 {comment?.comment}
+                                <br />
+                                {comment?.date_created}
                             </List.Item>
                         )}
                     />
