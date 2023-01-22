@@ -12,14 +12,16 @@ CVWO assignment to make a simple web forum
 -   [x] make first link
 -   [x] build category page
 -   [x] build post page
--   [ ] add delete post
--   [ ] add delete comment
--   [ ] add update post
--   [ ] add update comment
+-   [x] add delete post
+-   [x] add delete comment
+-   [x] add update post
+-   [x] add update comment
 -   [ ] add JWT
 -   [ ] build main page
--   [ ] endpoints for category page
--   [ ] endpoints for post page
--   [ ] build rest of endpoints
+-   [x] endpoints for category page
+-   [x] endpoints for post page
+-   [x] build rest of endpoints
 -   [ ] build rest of frontend and link to backend
 -   [ ] endpoint error handling
+-   [ ] make things look nice
+-   [ ] hosting stuff
