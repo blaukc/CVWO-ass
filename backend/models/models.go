@@ -6,6 +6,7 @@ type ForumUsers struct {
 	Id           string    `json:"id"`
 	Name         string    `json:"name"`
 	Date_Created time.Time `json:"date_created"`
+	Password     string    `json:"password"`
 }
 
 type Categories struct {
@@ -34,4 +35,9 @@ type Comments struct {
 type CommentsWithName struct {
 	Comments
 	Name string `json:"name"`
+}
+
+type UserCredentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
 }

@@ -38,3 +38,6 @@ CREATE TABLE Comments (
 
 ALTER TABLE posts ADD description TEXT;
 ALTER TABLE posts ALTER COLUMN description SET NOT NULL;
+
+ALTER TABLE forumusers ADD password TEXT;
+ALTER TABLE forumusers ALTER COLUMN password SET NOT NULL;

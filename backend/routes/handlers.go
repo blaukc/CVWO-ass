@@ -11,6 +11,8 @@ import (
 var (
 	getUserRe          = regexp.MustCompile(`^\/forumuser\/$`)
 	getUserSlugRe      = regexp.MustCompile(`^\/forumuser\/.+$`)
+	getLoginRe         = regexp.MustCompile(`^\/login\/$`)
+	getRegisterRe      = regexp.MustCompile(`^\/register\/$`)
 	getCommentRe       = regexp.MustCompile(`^\/comment\/$`)
 	getCommentSlugRe   = regexp.MustCompile(`^\/comment\/.+$`)
 	getPostRe          = regexp.MustCompile(`^\/post\/$`)
@@ -42,6 +44,53 @@ func ForumUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
+	switch {
+	// LOGIN
+	case r.Method == http.MethodPost && getLoginRe.MatchString(r.URL.Path):
+		api.Login(w, r)
+		return
+	// // PATCH USER
+	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
+	// 	api.PatchUser(w, r)
+	// 	return
+	// // CREATE USER
+	// case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
+	// 	api.PostUser(w, r)
+	// 	return
+	default:
+		http.NotFound(w, r)
+		return
+	}
+}
+
+func RegisterHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
+	switch {
+	// REGISTER
+	case r.Method == http.MethodPost && getRegisterRe.MatchString(r.URL.Path):
+		api.Register(w, r)
+		return
+	// // PATCH USER
+	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
+	// 	api.PatchUser(w, r)
+	// 	return
+	// // CREATE USER
+	// case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
+	// 	api.PostUser(w, r)
+	// 	return
+	default:
+		http.NotFound(w, r)
+		return
+	}
+}
+
 func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
