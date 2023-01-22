@@ -16,6 +16,11 @@ interface IProps {
 const ForumLayout: React.FC<IProps> = (props: IProps) => {
     const [category, setCategory] = useState("");
     const [currentPost, setCurrentPost] = useState("");
+    const [dummyUpdateSidebar, setDummyUpdateSidebar] = useState<number>(0);
+
+    const hydrateSidebar = () => {
+        setDummyUpdateSidebar(dummyUpdateSidebar + 1);
+    };
 
     return (
         <>
@@ -48,10 +53,15 @@ const ForumLayout: React.FC<IProps> = (props: IProps) => {
                                 category={category}
                                 setCategory={setCategory}
                                 setCurrentPost={setCurrentPost}
+                                dummyUpdateSidebar={dummyUpdateSidebar}
+                                hydrateSidebar={hydrateSidebar}
                             />
                         </Sider>
                         <Content>
-                            <ForumPost currentPost={currentPost} />
+                            <ForumPost
+                                currentPost={currentPost}
+                                hydrateSidebar={hydrateSidebar}
+                            />
                         </Content>
                     </Layout>
                 </Layout>

@@ -23,6 +23,7 @@ var (
 func ForumUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// GET USER
 	case r.Method == http.MethodGet && getUserSlugRe.MatchString(r.URL.Path):
@@ -44,6 +45,7 @@ func ForumUserHandler(w http.ResponseWriter, r *http.Request) {
 func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// GET CATEGORIES
 	case r.Method == http.MethodGet && getCategoryRe.MatchString(r.URL.Path):
@@ -59,6 +61,7 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// GET ALL POSTS FROM CATEGORY
 	case r.Method == http.MethodGet && getCategoryPostsRe.MatchString(r.URL.Path):
@@ -71,6 +74,9 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 		res := api.GetPost(w, r)
 		jsonRes, _ := json.Marshal(res)
 		w.Write(jsonRes)
+		return
+	case r.Method == "OPTIONS":
+		w.WriteHeader(http.StatusOK)
 		return
 	// DELETE POST
 	case r.Method == http.MethodDelete && getPostSlugRe.MatchString(r.URL.Path):
@@ -93,6 +99,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// GET COMMENTS BY POST
 	case r.Method == http.MethodGet && getPostCommentsRe.MatchString(r.URL.Path):
@@ -109,11 +116,15 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// // GET COMMENT
 	// case r.Method == http.MethodGet && getUserRe.MatchString(r.URL.Path):
 	// 	api.GetUser(w, r)
 	// 	return
+	case r.Method == "OPTIONS":
+		w.WriteHeader(http.StatusOK)
+		return
 	// DELETE COMMENT
 	case r.Method == http.MethodDelete && getCommentSlugRe.MatchString(r.URL.Path):
 		api.DeleteComment(w, r)

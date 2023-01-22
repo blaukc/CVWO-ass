@@ -13,6 +13,18 @@ export const Post = async (path: string, body: any) => {
     return res.data;
 };
 
+export const Patch = async (path: string, body: any) => {
+    const res = await axios.patch(`${host}${path}`, JSON.stringify(body));
+    // error handling somewhere
+    return res.data;
+};
+
+export const Delete = async (path: string) => {
+    const res = await axios.delete(`${host}${path}`);
+    // error handling somewhere
+    return res.data;
+};
+
 export const getCategories = async () => {
     const categories = await Get("/category/");
     return categories;
@@ -33,6 +45,16 @@ export const createPost = async (values: any) => {
     return res;
 };
 
+export const deletePost = async (commentId: string) => {
+    const res = await Delete(`/post/${commentId}`);
+    return res;
+};
+
+export const patchPost = async (commentId: string, values: any) => {
+    const res = await Patch(`/post/${commentId}`, values);
+    return res;
+};
+
 export const getPostComments = async (postId: string) => {
     const comments = await Get(`/comment/post/${postId}`);
     return comments;
@@ -40,5 +62,15 @@ export const getPostComments = async (postId: string) => {
 
 export const createComment = async (values: any) => {
     const res = await Post(`/comment/`, values);
+    return res;
+};
+
+export const deleteComment = async (commentId: string) => {
+    const res = await Delete(`/comment/${commentId}`);
+    return res;
+};
+
+export const patchComment = async (commentId: string, values: any) => {
+    const res = await Patch(`/comment/${commentId}`, values);
     return res;
 };

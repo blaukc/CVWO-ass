@@ -8,11 +8,12 @@ interface IProps {
     category: string | undefined;
     setCategory: (category: any) => void;
     setCurrentPost: (currentPost: string) => void;
+    dummyUpdateSidebar: number;
+    hydrateSidebar: () => void;
 }
 
 const CategorySidebar: React.FC<IProps> = (props: IProps) => {
     const [posts, setPosts] = useState<IPosts[]>([]);
-    const [dummyUpdate, setDummyUpdate] = useState<number>(0);
 
     const updatePostsState = async () => {
         if (!props?.category) {
@@ -25,16 +26,13 @@ const CategorySidebar: React.FC<IProps> = (props: IProps) => {
 
     useEffect(() => {
         updatePostsState();
-    }, [props?.category, dummyUpdate]);
+    }, [props?.category, props.dummyUpdateSidebar]);
 
     return (
         <>
             <List
                 header={
-                    <CreatePostModal
-                        dummyUpdate={dummyUpdate}
-                        setDummyUpdate={setDummyUpdate}
-                    />
+                    <CreatePostModal hydrateSidebar={props.hydrateSidebar} />
                 }
                 style={{
                     backgroundColor: "var(--forum-white)",

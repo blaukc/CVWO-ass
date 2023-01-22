@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Form, Modal, Row } from "antd";
-import CreatePostForm from "./CreatePostForm";
-import { createPost } from "../../api";
+import EditPostForm from "./EditPostForm";
+import { createPost, patchPost } from "../../api";
+import { IPosts } from "../../interfaces/api";
 
 interface IProps {
+    post: IPosts | null;
     hydrateSidebar: () => void;
+    hydratePost: () => void;
 }
 
-const CreatePostModal: React.FC<IProps> = (props: IProps) => {
+const EditPostModal: React.FC<IProps> = (props: IProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
 
@@ -28,26 +31,31 @@ const CreatePostModal: React.FC<IProps> = (props: IProps) => {
     const onFinish = (values: any) => {
         //TODO get user id
         const id = "b834bc17-63ea-43ff-a4ab-badc57386b9c";
-        createPost({ poster: id, ...values });
+        patchPost(props.post?.id as string, { ...props.post, ...values });
         form.resetFields();
         // We trigger an update to the posts sidebar
         props.hydrateSidebar();
+        props.hydratePost();
     };
 
     return (
         <>
             <Row onClick={showModal}>Open Modal</Row>
             <Modal
-                title="Create Post"
+                title="Edit Post"
                 open={isModalOpen}
                 onOk={handleOk}
-                okText="Create Post"
+                okText="Edit Post"
                 onCancel={handleCancel}
             >
-                <CreatePostForm form={form} onFinish={onFinish} />
+                <EditPostForm
+                    form={form}
+                    onFinish={onFinish}
+                    post={props.post}
+                />
             </Modal>
         </>
     );
 };
 
-export default CreatePostModal;
+export default EditPostModal;

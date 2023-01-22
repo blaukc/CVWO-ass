@@ -5,8 +5,7 @@ import { createComment, getPost, getPostComments } from "../../api";
 
 interface IProps {
     postId: string;
-    dummyUpdate: number;
-    setDummyUpdate: (dummyUpdate: number) => void;
+    hydratePost: () => void;
 }
 
 const PostComment: React.FC<IProps> = (props: IProps) => {
@@ -22,7 +21,8 @@ const PostComment: React.FC<IProps> = (props: IProps) => {
             ...values,
         });
         form.resetFields();
-        props.setDummyUpdate(props.dummyUpdate + 1);
+        // We trigger an update to the post
+        props.hydratePost();
     };
 
     return (
