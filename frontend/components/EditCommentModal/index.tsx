@@ -27,14 +27,20 @@ const EditCommentModal: React.FC<IProps> = (props: IProps) => {
         setIsModalOpen(false);
     };
 
-    const onFinish = (values: any) => {
+    const onFinish = async (values: any) => {
         //TODO get user id
         const id = "b834bc17-63ea-43ff-a4ab-badc57386b9c";
         if (values?.comment) {
-            patchComment(props.comment.id, { ...props.comment, ...values });
-            form.resetFields();
-            // We trigger an update to the posts sidebar
-            props.hydratePost();
+            const success = await patchComment(props.comment.id, {
+                ...props.comment,
+                ...values,
+            });
+            if (success) {
+                form.resetFields();
+                // We trigger an update to the posts sidebar
+                props.hydratePost();
+            } else {
+            }
         }
     };
 

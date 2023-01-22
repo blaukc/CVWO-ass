@@ -12,10 +12,12 @@ interface IProps {
 const { Title, Text } = Typography;
 
 const Comment: React.FC<IProps> = (props: IProps) => {
-    const deleteCommentHandler = () => {
-        deleteComment(props?.comment?.id);
-        // We trigger an update to the post
-        props.hydratePost();
+    const deleteCommentHandler = async () => {
+        const success = await deleteComment(props?.comment?.id);
+        if (success) {
+            // We trigger an update to the post
+            props.hydratePost();
+        }
     };
 
     return (

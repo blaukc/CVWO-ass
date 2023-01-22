@@ -11,18 +11,20 @@ interface IProps {
 const PostComment: React.FC<IProps> = (props: IProps) => {
     const [form] = Form.useForm();
 
-    const onFinish = (values: any) => {
+    const onFinish = async (values: any) => {
         // TODO ADD USER
-        console.log(values);
         const id = "b834bc17-63ea-43ff-a4ab-badc57386b9c";
-        createComment({
+        const success = await createComment({
             commenter: id,
             post: props.postId,
             ...values,
         });
-        form.resetFields();
-        // We trigger an update to the post
-        props.hydratePost();
+        if (success) {
+            form.resetFields();
+            // We trigger an update to the post
+            props.hydratePost();
+        } else {
+        }
     };
 
     return (

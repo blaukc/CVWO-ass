@@ -2,27 +2,44 @@ import { host } from "./ip";
 const axios = require("axios");
 
 export const Get = async (path: string) => {
-    const res = await axios.get(`${host}${path}`);
-    // error handling somewhere
-    return res.data;
+    try {
+        const res = await axios.get(`${host}${path}`);
+        // error handling somewhere
+        return res.data;
+    } catch (error) {}
 };
 
 export const Post = async (path: string, body: any) => {
-    const res = await axios.post(`${host}${path}`, JSON.stringify(body));
-    // error handling somewhere
-    return res.data;
+    try {
+        const res = await axios.post(`${host}${path}`, JSON.stringify(body));
+        // error handling somewhere
+        console.log(res);
+        return true;
+    } catch (error) {
+        // Need some better error handling but i have no time
+        return false;
+    }
 };
 
 export const Patch = async (path: string, body: any) => {
-    const res = await axios.patch(`${host}${path}`, JSON.stringify(body));
-    // error handling somewhere
-    return res.data;
+    try {
+        const res = await axios.patch(`${host}${path}`, JSON.stringify(body));
+        return true;
+    } catch (error) {
+        // Need some better error handling but i have no time
+        return false;
+    }
 };
 
 export const Delete = async (path: string) => {
-    const res = await axios.delete(`${host}${path}`);
-    // error handling somewhere
-    return res.data;
+    try {
+        const res = await axios.delete(`${host}${path}`);
+        // error handling somewhere
+        return true;
+    } catch (error) {
+        // Need some better error handling but i have no time
+        return false;
+    }
 };
 
 export const getCategories = async () => {

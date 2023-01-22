@@ -25,13 +25,16 @@ const CreatePostModal: React.FC<IProps> = (props: IProps) => {
         setIsModalOpen(false);
     };
 
-    const onFinish = (values: any) => {
+    const onFinish = async (values: any) => {
         //TODO get user id
         const id = "b834bc17-63ea-43ff-a4ab-badc57386b9c";
-        createPost({ poster: id, ...values });
-        form.resetFields();
-        // We trigger an update to the posts sidebar
-        props.hydrateSidebar();
+        const success = await createPost({ poster: id, ...values });
+        if (success) {
+            form.resetFields();
+            // We trigger an update to the posts sidebar
+            props.hydrateSidebar();
+        } else {
+        }
     };
 
     return (

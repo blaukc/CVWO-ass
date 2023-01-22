@@ -40,13 +40,16 @@ const ForumPost: React.FC<IProps> = (props: IProps) => {
         }
     }, [props.currentPost, dummyUpdatePost]);
 
-    const deletePostHandler = () => {
-        deletePost(props.currentPost);
-        // We trigger an update to the posts sidebar
-        props.hydrateSidebar();
-        // We also remove the current post from the screen
-        setPost(null);
-        setComments([]);
+    const deletePostHandler = async () => {
+        const success = await deletePost(props.currentPost);
+        if (success) {
+            // We trigger an update to the posts sidebar
+            props.hydrateSidebar();
+            // We also remove the current post from the screen
+            setPost(null);
+            setComments([]);
+        } else {
+        }
     };
 
     return (
