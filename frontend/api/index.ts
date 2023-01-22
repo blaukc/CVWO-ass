@@ -13,7 +13,6 @@ export const Post = async (path: string, body: any) => {
     try {
         const res = await axios.post(`${host}${path}`, JSON.stringify(body));
         // error handling somewhere
-        console.log(res);
         return true;
     } catch (error) {
         // Need some better error handling but i have no time
@@ -89,5 +88,21 @@ export const deleteComment = async (commentId: string) => {
 
 export const patchComment = async (commentId: string, values: any) => {
     const res = await Patch(`/comment/${commentId}`, values);
+    return res;
+};
+
+export const login = async (username: string, password: string) => {
+    const res = await Post(`/login/`, {
+        username: username,
+        password: password,
+    });
+    return res;
+};
+
+export const register = async (username: string, password: string) => {
+    const res = await Post(`/register/`, {
+        username: username,
+        password: password,
+    });
     return res;
 };

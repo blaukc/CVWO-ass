@@ -1,7 +1,6 @@
 import { Layout } from "antd";
 import Head from "next/head";
 import React from "react";
-import CategorySidebar from "./CategorySidebar";
 import HeaderComponent from "./Header";
 
 const { Header, Footer, Sider, Content } = Layout;

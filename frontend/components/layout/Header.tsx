@@ -25,6 +25,11 @@ const items: MenuProps["items"] = [
         key: "about",
         icon: <AppstoreOutlined />,
     },
+    {
+        label: <Link href="/login">Login</Link>,
+        key: "login",
+        icon: <AppstoreOutlined />,
+    },
 ];
 
 const getSelectedHeader = (router: NextRouter): string => {
