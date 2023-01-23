@@ -52,7 +52,10 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	// LOGIN
 	case r.Method == http.MethodPost && getLoginRe.MatchString(r.URL.Path):
-		api.Login(w, r)
+		token := api.Login(w, r)
+		res := map[string]string{"token": token}
+		jsonRes, _ := json.Marshal(res)
+		w.Write(jsonRes)
 		return
 	// // PATCH USER
 	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
@@ -75,7 +78,10 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	// REGISTER
 	case r.Method == http.MethodPost && getRegisterRe.MatchString(r.URL.Path):
-		api.Register(w, r)
+		token := api.Register(w, r)
+		res := map[string]string{"token": token}
+		jsonRes, _ := json.Marshal(res)
+		w.Write(jsonRes)
 		return
 	// // PATCH USER
 	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
@@ -98,9 +104,7 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	// GET CATEGORIES
 	case r.Method == http.MethodGet && getCategoryRe.MatchString(r.URL.Path):
-		res := api.GetCategories(w, r)
-		jsonRes, _ := json.Marshal(res)
-		w.Write(jsonRes)
+		api.GetCategories(w, r)
 		return
 	default:
 		http.NotFound(w, r)
@@ -114,30 +118,26 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	// GET ALL POSTS FROM CATEGORY
 	case r.Method == http.MethodGet && getCategoryPostsRe.MatchString(r.URL.Path):
-		res := api.GetCategoryPosts(w, r)
-		jsonRes, _ := json.Marshal(res)
-		w.Write(jsonRes)
+		api.GetCategoryPosts(w, r)
 		return
 	// GET POST
 	case r.Method == http.MethodGet && getPostSlugRe.MatchString(r.URL.Path):
-		res := api.GetPost(w, r)
-		jsonRes, _ := json.Marshal(res)
-		w.Write(jsonRes)
+		api.GetPost(w, r)
 		return
 	case r.Method == "OPTIONS":
 		w.WriteHeader(http.StatusOK)
 		return
 	// DELETE POST
 	case r.Method == http.MethodDelete && getPostSlugRe.MatchString(r.URL.Path):
-		api.DeletePost(w, r)
+		api.VerifyToken(api.DeletePost)(w, r)
 		return
 	// PATCH POST
 	case r.Method == http.MethodPatch && getPostSlugRe.MatchString(r.URL.Path):
-		api.PatchPost(w, r)
+		api.VerifyToken(api.PatchPost)(w, r)
 		return
 	// CREATE POST
 	case r.Method == http.MethodPost && getPostRe.MatchString(r.URL.Path):
-		api.CreatePost(w, r)
+		api.VerifyToken(api.CreatePost)(w, r)
 		return
 	default:
 		http.NotFound(w, r)
@@ -152,9 +152,7 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	// GET COMMENTS BY POST
 	case r.Method == http.MethodGet && getPostCommentsRe.MatchString(r.URL.Path):
-		res := api.GetCommentsByPost(w, r)
-		jsonRes, _ := json.Marshal(res)
-		w.Write(jsonRes)
+		api.GetCommentsByPost(w, r)
 		return
 	default:
 		http.NotFound(w, r)
@@ -176,15 +174,15 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	// DELETE COMMENT
 	case r.Method == http.MethodDelete && getCommentSlugRe.MatchString(r.URL.Path):
-		api.DeleteComment(w, r)
+		api.VerifyToken(api.DeleteComment)(w, r)
 		return
 	// PATCH COMMENT
 	case r.Method == http.MethodPatch && getCommentSlugRe.MatchString(r.URL.Path):
-		api.PatchComment(w, r)
+		api.VerifyToken(api.PatchComment)(w, r)
 		return
 	// CREATE COMMENT
 	case r.Method == http.MethodPost && getCommentRe.MatchString(r.URL.Path):
-		api.PostComment(w, r)
+		api.VerifyToken(api.PostComment)(w, r)
 		return
 	default:
 		http.NotFound(w, r)

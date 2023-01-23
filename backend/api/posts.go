@@ -10,7 +10,7 @@ import (
 	"github.com/blaukc/CVWO-ass/backend/models"
 )
 
-func GetCategoryPosts(w http.ResponseWriter, r *http.Request) []models.Posts {
+func GetCategoryPosts(w http.ResponseWriter, r *http.Request) {
 	categoryName := path.Base(r.URL.Path)
 	fmt.Println(categoryName)
 	var categoryRes []models.Posts
@@ -31,11 +31,11 @@ func GetCategoryPosts(w http.ResponseWriter, r *http.Request) []models.Posts {
 	database.GetRows(db, &res, sqlStatement)
 
 	database.Disconnect(db)
-	fmt.Println(res)
-	return res
+	jsonRes, _ := json.Marshal(res)
+	w.Write(jsonRes)
 }
 
-func GetPost(w http.ResponseWriter, r *http.Request) []models.Posts {
+func GetPost(w http.ResponseWriter, r *http.Request) {
 	postId := path.Base(r.URL.Path)
 
 	db := database.Connect()
@@ -44,9 +44,9 @@ func GetPost(w http.ResponseWriter, r *http.Request) []models.Posts {
 	database.GetRowById(db, &res, "posts", postId)
 
 	database.Disconnect(db)
-	fmt.Println(res)
 
-	return res
+	jsonRes, _ := json.Marshal(res)
+	w.Write(jsonRes)
 }
 
 func DeletePost(w http.ResponseWriter, r *http.Request) {

@@ -4,10 +4,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"path"
+	"time"
 
 	"github.com/blaukc/CVWO-ass/backend/database"
 	"github.com/blaukc/CVWO-ass/backend/models"
+	"github.com/golang-jwt/jwt"
+	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -29,13 +33,13 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(w)
 }
 
-func Login(w http.ResponseWriter, r *http.Request) {
+func Login(w http.ResponseWriter, r *http.Request) string {
 	var credentials models.UserCredentials
 	err := json.NewDecoder(r.Body).Decode(&credentials)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return ""
 	}
 
 	// hash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcrypt.DefaultCost)
@@ -46,32 +50,38 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	db := database.Connect()
 
 	var res []models.ForumUsers
-	sqlStatement := fmt.Sprintf("SELECT password FROM forumusers WHERE name='%s'", credentials.Username)
+	sqlStatement := fmt.Sprintf("SELECT id, password FROM forumusers WHERE name='%s'", credentials.Username)
 	database.GetRows(db, &res, sqlStatement)
 
 	database.Disconnect(db)
 
 	if len(res) == 0 {
 		http.Error(w, "Incorrect Username", http.StatusBadRequest)
-		return
+		return ""
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(res[0].Password), []byte(credentials.Password))
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return ""
 	}
 
+	token, err := CreateToken(res[0].Id)
+	if err != nil {
+		panic(err)
+	}
+
+	return token
 }
 
-func Register(w http.ResponseWriter, r *http.Request) {
+func Register(w http.ResponseWriter, r *http.Request) string {
 	var credentials models.UserCredentials
 	err := json.NewDecoder(r.Body).Decode(&credentials)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		return ""
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcrypt.DefaultCost)
@@ -89,4 +99,99 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	database.Disconnect(db)
 
+	// Get the new ID
+	db = database.Connect()
+
+	var res []models.ForumUsers
+	sqlStatement := fmt.Sprintf("SELECT id FROM forumusers WHERE name='%s'", credentials.Username)
+	database.GetRows(db, &res, sqlStatement)
+
+	database.Disconnect(db)
+
+	// Generate and return token
+	token, err := CreateToken(res[0].Id)
+	if err != nil {
+		panic(err)
+	}
+
+	return token
+}
+func CreateToken(user_id string) (string, error) {
+	env_err := godotenv.Load(".env")
+
+	if env_err != nil {
+		panic(env_err)
+	}
+
+	secret := []byte(os.Getenv("JWT_SECRET"))
+	token := jwt.New(jwt.SigningMethodHS256)
+
+	claims := token.Claims.(jwt.MapClaims)
+	claims["exp"] = time.Now().Add(-2 * time.Hour).Unix()
+	claims["user"] = user_id
+
+	tokenString, err := token.SignedString(secret)
+
+	if err != nil {
+		return "", err
+	}
+
+	return tokenString, nil
+}
+
+func VerifyToken(endpointHandler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header["Authorization"] != nil {
+			env_err := godotenv.Load(".env")
+
+			if env_err != nil {
+				panic(env_err)
+			}
+
+			secret := []byte(os.Getenv("JWT_SECRET"))
+
+			token, err := jwt.Parse(
+				r.Header["Authorization"][0],
+				func(token *jwt.Token) (interface{}, error) {
+					_, ok := token.Method.(*jwt.SigningMethodHMAC)
+					if !ok {
+						w.WriteHeader(http.StatusUnauthorized)
+						_, err := w.Write([]byte("You're Unauthorized!"))
+						if err != nil {
+							return nil, err
+
+						}
+					}
+					return secret, nil
+				},
+			)
+
+			if err != nil {
+				w.WriteHeader(http.StatusUnauthorized)
+				_, err2 := w.Write([]byte("You're Unauthorized due to error parsing the JWT"))
+				if err2 != nil {
+					return
+				}
+			}
+
+			claims, ok := token.Claims.(jwt.MapClaims)
+			if ok && token.Valid {
+				fmt.Println(claims["user"])
+				endpointHandler(w, r)
+			} else {
+				w.WriteHeader(http.StatusUnauthorized)
+				_, err := w.Write([]byte("You're Unauthorized due to invalid token"))
+				if err != nil {
+					return
+				}
+			}
+		} else {
+			w.WriteHeader(http.StatusUnauthorized)
+			_, err := w.Write([]byte("You're Unauthorized due to No token in the header"))
+			if err != nil {
+				return
+			}
+		}
+
+	})
 }

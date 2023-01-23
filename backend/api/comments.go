@@ -21,7 +21,7 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(res)
 }
 
-func GetCommentsByPost(w http.ResponseWriter, r *http.Request) []models.CommentsWithName {
+func GetCommentsByPost(w http.ResponseWriter, r *http.Request) {
 	postId := path.Base(r.URL.Path)
 	db := database.Connect()
 
@@ -38,8 +38,9 @@ func GetCommentsByPost(w http.ResponseWriter, r *http.Request) []models.Comments
 	database.GetRows(db, &res, sqlStatement)
 
 	database.Disconnect(db)
-	fmt.Println(res)
-	return res
+
+	jsonRes, _ := json.Marshal(res)
+	w.Write(jsonRes)
 }
 
 func DeleteComment(w http.ResponseWriter, r *http.Request) {

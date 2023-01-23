@@ -2,21 +2,29 @@ package database
 
 import (
 	"fmt"
+	"os"
+	"strconv"
 	"strings"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = "host.docker.internal"
-	port     = 5432
-	user     = "cvwo_user"
-	password = "cvw0_us3r"
-	dbname   = "cvwo_forum"
-)
-
 func Connect() (db *sqlx.DB) {
+
+	env_err := godotenv.Load(".env")
+
+	if env_err != nil {
+		panic(env_err)
+	}
+
+	host := "localhost" //os.Getenv("DB_host")
+	port, _ := strconv.Atoi(os.Getenv("DB_port"))
+	user := os.Getenv("DB_user")
+	password := os.Getenv("DB_password")
+	dbname := os.Getenv("DB_dbname")
+
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
