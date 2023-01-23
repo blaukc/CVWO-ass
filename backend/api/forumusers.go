@@ -161,7 +161,7 @@ func VerifyToken(endpointHandler func(w http.ResponseWriter, r *http.Request, us
 					_, ok := token.Method.(*jwt.SigningMethodHMAC)
 					if !ok {
 						w.WriteHeader(http.StatusUnauthorized)
-						_, err := w.Write([]byte("You're Unauthorized!"))
+						_, err := w.Write([]byte("You're Unauthorized due to!"))
 						if err != nil {
 							return nil, err
 

@@ -108,7 +108,7 @@ func PostComment(w http.ResponseWriter, r *http.Request, user_id string) {
 	}
 
 	columns := []string{"commenter", "post", "comment"}
-	values := []string{comment.Commenter, comment.Post, comment.Comment}
+	values := []string{user_id, comment.Post, comment.Comment}
 	fmt.Println(values)
 	table := "comments"
 

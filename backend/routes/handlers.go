@@ -24,6 +24,7 @@ var (
 func ForumUserHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
 	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// GET USER
@@ -77,6 +78,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
 	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// GET CATEGORIES
@@ -91,6 +93,7 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 func PostHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
 	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// GET ALL POSTS FROM CATEGORY
@@ -125,6 +128,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
 	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// GET COMMENTS BY POST
@@ -140,6 +144,7 @@ func PostCommentHandler(w http.ResponseWriter, r *http.Request) {
 func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Headers", "Authorization")
 	w.Header().Set("Access-Control-Allow-Methods", "DELETE, PATCH, POST, GET, OPTIONS")
 	switch {
 	// // GET COMMENT

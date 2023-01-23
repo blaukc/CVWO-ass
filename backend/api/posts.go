@@ -118,7 +118,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request, user_id string) {
 	}
 
 	columns := []string{"poster", "category", "title", "description"}
-	values := []string{post.Poster, post.Category, post.Title, post.Description}
+	values := []string{user_id, post.Category, post.Title, post.Description}
 	table := "posts"
 
 	db := database.Connect()
