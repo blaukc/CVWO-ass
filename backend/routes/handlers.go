@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"encoding/json"
 	"net/http"
 	"regexp"
 
@@ -52,19 +51,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	// LOGIN
 	case r.Method == http.MethodPost && getLoginRe.MatchString(r.URL.Path):
-		token := api.Login(w, r)
-		res := map[string]string{"token": token}
-		jsonRes, _ := json.Marshal(res)
-		w.Write(jsonRes)
+		api.Login(w, r)
 		return
-	// // PATCH USER
-	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
-	// 	api.PatchUser(w, r)
-	// 	return
-	// // CREATE USER
-	// case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
-	// 	api.PostUser(w, r)
-	// 	return
 	default:
 		http.NotFound(w, r)
 		return
@@ -78,19 +66,8 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	switch {
 	// REGISTER
 	case r.Method == http.MethodPost && getRegisterRe.MatchString(r.URL.Path):
-		token := api.Register(w, r)
-		res := map[string]string{"token": token}
-		jsonRes, _ := json.Marshal(res)
-		w.Write(jsonRes)
+		api.Register(w, r)
 		return
-	// // PATCH USER
-	// case r.Method == http.MethodPatch && getUserRe.MatchString(r.URL.Path):
-	// 	api.PatchUser(w, r)
-	// 	return
-	// // CREATE USER
-	// case r.Method == http.MethodPost && getUserRe.MatchString(r.URL.Path):
-	// 	api.PostUser(w, r)
-	// 	return
 	default:
 		http.NotFound(w, r)
 		return

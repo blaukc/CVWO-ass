@@ -33,13 +33,13 @@ func PostUser(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(w)
 }
 
-func Login(w http.ResponseWriter, r *http.Request) string {
+func Login(w http.ResponseWriter, r *http.Request) {
 	var credentials models.UserCredentials
 	err := json.NewDecoder(r.Body).Decode(&credentials)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return ""
+		return
 	}
 
 	// hash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcrypt.DefaultCost)
@@ -49,39 +49,41 @@ func Login(w http.ResponseWriter, r *http.Request) string {
 
 	db := database.Connect()
 
-	var res []models.ForumUsers
-	sqlStatement := fmt.Sprintf("SELECT id, password FROM forumusers WHERE name='%s'", credentials.Username)
-	database.GetRows(db, &res, sqlStatement)
+	var user []models.ForumUsers
+	sqlStatement := fmt.Sprintf("SELECT * FROM forumusers WHERE name='%s'", credentials.Username)
+	database.GetRows(db, &user, sqlStatement)
 
 	database.Disconnect(db)
 
-	if len(res) == 0 {
+	if len(user) == 0 {
 		http.Error(w, "Incorrect Username", http.StatusBadRequest)
-		return ""
+		return
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(res[0].Password), []byte(credentials.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(user[0].Password), []byte(credentials.Password))
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return ""
+		return
 	}
 
-	token, err := CreateToken(res[0].Id)
+	token, err := CreateToken(user[0].Id)
 	if err != nil {
 		panic(err)
 	}
 
-	return token
+	res := map[string]string{"token": token, "user_id": user[0].Id, "user_name": user[0].Name}
+	jsonRes, _ := json.Marshal(res)
+	w.Write(jsonRes)
 }
 
-func Register(w http.ResponseWriter, r *http.Request) string {
+func Register(w http.ResponseWriter, r *http.Request) {
 	var credentials models.UserCredentials
 	err := json.NewDecoder(r.Body).Decode(&credentials)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		return ""
+		return
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcrypt.DefaultCost)
@@ -102,20 +104,23 @@ func Register(w http.ResponseWriter, r *http.Request) string {
 	// Get the new ID
 	db = database.Connect()
 
-	var res []models.ForumUsers
-	sqlStatement := fmt.Sprintf("SELECT id FROM forumusers WHERE name='%s'", credentials.Username)
-	database.GetRows(db, &res, sqlStatement)
+	var user []models.ForumUsers
+	sqlStatement := fmt.Sprintf("SELECT * FROM forumusers WHERE name='%s'", credentials.Username)
+	database.GetRows(db, &user, sqlStatement)
 
 	database.Disconnect(db)
 
 	// Generate and return token
-	token, err := CreateToken(res[0].Id)
+	token, err := CreateToken(user[0].Id)
 	if err != nil {
 		panic(err)
 	}
 
-	return token
+	res := map[string]string{"token": token, "user_id": user[0].Id, "user_name": user[0].Name}
+	jsonRes, _ := json.Marshal(res)
+	w.Write(jsonRes)
 }
+
 func CreateToken(user_id string) (string, error) {
 	env_err := godotenv.Load(".env")
 
