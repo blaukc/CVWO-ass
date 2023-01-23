@@ -43,17 +43,22 @@ func GetCommentsByPost(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonRes)
 }
 
-func DeleteComment(w http.ResponseWriter, r *http.Request) {
+func DeleteComment(w http.ResponseWriter, r *http.Request, user_id string) {
 	commentId := path.Base(r.URL.Path)
 
-	db := database.Connect()
+	if AuthToComment(commentId, user_id) {
+		db := database.Connect()
 
-	database.DeleteById(db, "comments", commentId)
+		database.DeleteById(db, "comments", commentId)
 
-	database.Disconnect(db)
+		database.Disconnect(db)
+	} else {
+		http.Error(w, "Unauthorized to remove this comment", http.StatusUnauthorized)
+		return
+	}
 }
 
-func PatchComment(w http.ResponseWriter, r *http.Request) {
+func PatchComment(w http.ResponseWriter, r *http.Request, user_id string) {
 	commentId := path.Base(r.URL.Path)
 	var comment models.Comments
 	err := json.NewDecoder(r.Body).Decode(&comment)
@@ -63,22 +68,37 @@ func PatchComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var columns []string
-	var values []string
-	if comment.Comment != "" {
-		columns = append(columns, "comment")
-		values = append(values, comment.Comment)
+	if AuthToComment(commentId, user_id) {
+		var columns []string
+		var values []string
+		if comment.Comment != "" {
+			columns = append(columns, "comment")
+			values = append(values, comment.Comment)
+		}
+		table := "comments"
+
+		db := database.Connect()
+
+		database.PatchById(db, table, commentId, columns, values)
+
+		database.Disconnect(db)
+	} else {
+		http.Error(w, "Unauthorized to update this comment", http.StatusUnauthorized)
+		return
 	}
-	table := "comments"
-
-	db := database.Connect()
-
-	database.PatchById(db, table, commentId, columns, values)
-
-	database.Disconnect(db)
 }
 
-func PostComment(w http.ResponseWriter, r *http.Request) {
+func AuthToComment(commentId string, userId string) bool {
+	db := database.Connect()
+	var comment []models.Comments
+	database.GetRowById(db, &comment, "comments", commentId)
+
+	database.Disconnect(db)
+
+	return comment[0].Commenter == userId
+}
+
+func PostComment(w http.ResponseWriter, r *http.Request, user_id string) {
 	var comment models.Comments
 	err := json.NewDecoder(r.Body).Decode(&comment)
 

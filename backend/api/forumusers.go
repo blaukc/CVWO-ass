@@ -127,7 +127,7 @@ func CreateToken(user_id string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(-2 * time.Hour).Unix()
+	claims["exp"] = time.Now().Add(2 * time.Hour).Unix()
 	claims["user"] = user_id
 
 	tokenString, err := token.SignedString(secret)
@@ -139,7 +139,7 @@ func CreateToken(user_id string) (string, error) {
 	return tokenString, nil
 }
 
-func VerifyToken(endpointHandler func(w http.ResponseWriter, r *http.Request)) http.HandlerFunc {
+func VerifyToken(endpointHandler func(w http.ResponseWriter, r *http.Request, user_id string)) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Header["Authorization"] != nil {
 			env_err := godotenv.Load(".env")
@@ -176,8 +176,7 @@ func VerifyToken(endpointHandler func(w http.ResponseWriter, r *http.Request)) h
 
 			claims, ok := token.Claims.(jwt.MapClaims)
 			if ok && token.Valid {
-				fmt.Println(claims["user"])
-				endpointHandler(w, r)
+				endpointHandler(w, r, claims["user"].(string))
 			} else {
 				w.WriteHeader(http.StatusUnauthorized)
 				_, err := w.Write([]byte("You're Unauthorized due to invalid token"))
