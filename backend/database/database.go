@@ -19,7 +19,7 @@ func Connect() (db *sqlx.DB) {
 		panic(env_err)
 	}
 
-	host := "localhost" //os.Getenv("DB_host")
+	host := os.Getenv("DB_host")
 	port, _ := strconv.Atoi(os.Getenv("DB_port"))
 	user := os.Getenv("DB_user")
 	password := os.Getenv("DB_password")
@@ -30,12 +30,14 @@ func Connect() (db *sqlx.DB) {
 		host, port, user, password, dbname)
 	db, err := sqlx.Open("postgres", psqlInfo)
 	if err != nil {
+		fmt.Println(err)
 		panic(err)
 	}
 	// defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
+		fmt.Println(err)
 		panic(err)
 	}
 

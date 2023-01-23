@@ -1,8 +1,12 @@
+version: "3"
+
 services:
     cvwo-backend:
         image: cvwo-backend:latest
         build: .
         ports: 
             - 54321:54321
-            - 5432:5432
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+           
 
