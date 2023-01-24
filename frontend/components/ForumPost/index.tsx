@@ -71,12 +71,21 @@ const ForumPost: React.FC<IProps> = (props: IProps) => {
                                     <Title level={3}>{post?.title}</Title>
                                     <Text>{post?.description}</Text>
                                     <br />
-                                    <a onClick={deletePostHandler}>delete</a>
-                                    <EditPostModal
-                                        post={post}
-                                        hydrateSidebar={props.hydrateSidebar}
-                                        hydratePost={hydratePost}
-                                    />
+                                    {localStorage.getItem("user_id") ===
+                                        post?.poster && (
+                                        <>
+                                            <a onClick={deletePostHandler}>
+                                                delete
+                                            </a>
+                                            <EditPostModal
+                                                post={post}
+                                                hydrateSidebar={
+                                                    props.hydrateSidebar
+                                                }
+                                                hydratePost={hydratePost}
+                                            />
+                                        </>
+                                    )}
                                 </Col>
                             </>
                         }

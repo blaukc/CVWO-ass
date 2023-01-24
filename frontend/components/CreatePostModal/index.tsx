@@ -27,8 +27,7 @@ const CreatePostModal: React.FC<IProps> = (props: IProps) => {
 
     const onFinish = async (values: any) => {
         //TODO get user id
-        const id = "b834bc17-63ea-43ff-a4ab-badc57386b9c";
-        const success = await createPost({ poster: id, ...values });
+        const success = await createPost({ ...values });
         if (success) {
             form.resetFields();
             // We trigger an update to the posts sidebar

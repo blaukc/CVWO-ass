@@ -28,11 +28,16 @@ const Comment: React.FC<IProps> = (props: IProps) => {
                 <br />
                 {props?.comment?.date_created}
                 <br />
-                <a onClick={deleteCommentHandler}>delete</a>
-                <EditCommentModal
-                    comment={props.comment}
-                    hydratePost={props.hydratePost}
-                />
+                {localStorage.getItem("user_id") ===
+                    props.comment.commenter && (
+                    <>
+                        <a onClick={deleteCommentHandler}>delete</a>
+                        <EditCommentModal
+                            comment={props.comment}
+                            hydratePost={props.hydratePost}
+                        />
+                    </>
+                )}
             </List.Item>
         </>
     );

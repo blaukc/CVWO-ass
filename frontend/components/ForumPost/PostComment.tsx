@@ -13,9 +13,7 @@ const PostComment: React.FC<IProps> = (props: IProps) => {
 
     const onFinish = async (values: any) => {
         // TODO ADD USER
-        const id = "b834bc17-63ea-43ff-a4ab-badc57386b9c";
         const success = await createComment({
-            commenter: id,
             post: props.postId,
             ...values,
         });

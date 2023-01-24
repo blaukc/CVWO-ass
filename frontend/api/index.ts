@@ -9,32 +9,61 @@ export const Get = async (path: string) => {
     } catch (error) {}
 };
 
-export const Post = async (path: string, body: any) => {
+export const Post = async (path: string, body: any, useToken: boolean) => {
     try {
-        const res = await axios.post(`${host}${path}`, JSON.stringify(body));
+        const token = localStorage.getItem("token");
+        const config = {
+            headers: {
+                Authorization: token,
+            },
+        };
+        const res = await axios.post(
+            `${host}${path}`,
+            JSON.stringify(body),
+            useToken ? config : null
+        );
         // error handling somewhere
-        return true;
+        return res;
     } catch (error) {
         // Need some better error handling but i have no time
         return false;
     }
 };
 
-export const Patch = async (path: string, body: any) => {
+export const Patch = async (path: string, body: any, useToken: boolean) => {
     try {
-        const res = await axios.patch(`${host}${path}`, JSON.stringify(body));
-        return true;
+        const token = localStorage.getItem("token");
+        const config = {
+            headers: {
+                Authorization: token,
+            },
+        };
+        const res = await axios.patch(
+            `${host}${path}`,
+            JSON.stringify(body),
+            useToken ? config : null
+        );
+        return res;
     } catch (error) {
         // Need some better error handling but i have no time
         return false;
     }
 };
 
-export const Delete = async (path: string) => {
+export const Delete = async (path: string, useToken: boolean) => {
     try {
-        const res = await axios.delete(`${host}${path}`);
+        const token = localStorage.getItem("token");
+        const config = {
+            headers: {
+                Authorization: token,
+            },
+        };
+        const res = await axios.delete(
+            `${host}${path}`,
+            useToken ? config : null
+        );
         // error handling somewhere
-        return true;
+        return res;
     } catch (error) {
         // Need some better error handling but i have no time
         return false;
@@ -57,17 +86,17 @@ export const getCategoryPosts = async (categoryName: string) => {
 };
 
 export const createPost = async (values: any) => {
-    const res = await Post(`/post/`, values);
+    const res = await Post(`/post/`, values, true);
     return res;
 };
 
 export const deletePost = async (commentId: string) => {
-    const res = await Delete(`/post/${commentId}`);
+    const res = await Delete(`/post/${commentId}`, true);
     return res;
 };
 
 export const patchPost = async (commentId: string, values: any) => {
-    const res = await Patch(`/post/${commentId}`, values);
+    const res = await Patch(`/post/${commentId}`, values, true);
     return res;
 };
 
@@ -77,32 +106,40 @@ export const getPostComments = async (postId: string) => {
 };
 
 export const createComment = async (values: any) => {
-    const res = await Post(`/comment/`, values);
+    const res = await Post(`/comment/`, values, true);
     return res;
 };
 
 export const deleteComment = async (commentId: string) => {
-    const res = await Delete(`/comment/${commentId}`);
+    const res = await Delete(`/comment/${commentId}`, true);
     return res;
 };
 
 export const patchComment = async (commentId: string, values: any) => {
-    const res = await Patch(`/comment/${commentId}`, values);
+    const res = await Patch(`/comment/${commentId}`, values, true);
     return res;
 };
 
 export const login = async (username: string, password: string) => {
-    const res = await Post(`/login/`, {
-        username: username,
-        password: password,
-    });
+    const res = await Post(
+        `/login/`,
+        {
+            username: username,
+            password: password,
+        },
+        false
+    );
     return res;
 };
 
 export const register = async (username: string, password: string) => {
-    const res = await Post(`/register/`, {
-        username: username,
-        password: password,
-    });
+    const res = await Post(
+        `/register/`,
+        {
+            username: username,
+            password: password,
+        },
+        false
+    );
     return res;
 };

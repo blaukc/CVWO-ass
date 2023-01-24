@@ -1,13 +1,23 @@
 import { Button, Col, Form, Input, Row } from "antd";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { login } from "../api";
 import HomeLayout from "../components/layout/HomeLayout";
 
 const Home = (): JSX.Element => {
     const [form] = Form.useForm();
+    const router = useRouter();
 
     const onFinish = async (values: any) => {
-        await login(values?.username, values?.password);
+        const res = await login(values?.username, values?.password);
+        if (res) {
+            localStorage.setItem("token", res.data.token);
+            localStorage.setItem("user_name", res.data.user_name);
+            localStorage.setItem("user_id", res.data.user_id);
+            router.push("/general");
+        } else {
+            //fail prompt
+        }
     };
 
     return (
@@ -58,7 +68,7 @@ const Home = (): JSX.Element => {
                                         </Button>
                                     </Form.Item>
                                     <p style={{ textAlign: "center" }}>
-                                        Don't have an account?{" "}
+                                        Don&apos;t have an account?{" "}
                                         <Link href="/register">Register</Link>
                                     </p>
                                 </Form>
