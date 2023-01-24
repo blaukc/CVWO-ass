@@ -1,5 +1,6 @@
 // import { host } from "./ip";
 const host = process.env.NEXT_PUBLIC_HOST_IP;
+// const host = "http://localhost:54321";
 const axios = require("axios");
 
 export const Get = async (path: string) => {

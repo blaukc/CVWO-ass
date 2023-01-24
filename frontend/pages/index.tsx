@@ -1,11 +1,47 @@
+import { Col, Row } from "antd";
 import HomeLayout from "../components/layout/HomeLayout";
 
 const Home = (): JSX.Element => {
     return (
         <>
-            <div>hello main page</div>
-            <div></div>
-            <HomeLayout />
+            <HomeLayout
+                body={
+                    <>
+                        <Row
+                            justify="center"
+                            style={{ backgroundColor: "white" }}
+                        >
+                            <Col
+                                md={8}
+                                style={{
+                                    height: "80vh",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Row align="middle" justify="center">
+                                    <p
+                                        style={{
+                                            textAlign: "center",
+                                            color: "var(--forum-blue)",
+                                            fontSize: 36,
+                                            fontFamily: "sans-serif",
+                                        }}
+                                    >
+                                        Welcome to my CVWO Forum. <br />
+                                        This is a place for NUS students to ask
+                                        questions and learn more about their
+                                        faculty. <br />I didn't have much time
+                                        so I did what I could with whatever time
+                                        I had.
+                                    </p>
+                                </Row>
+                            </Col>
+                        </Row>
+                    </>
+                }
+            />
         </>
     );
 };

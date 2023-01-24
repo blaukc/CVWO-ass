@@ -7,6 +7,7 @@ import CreatePostModal from "../CreatePostModal";
 interface IProps {
     category: string | undefined;
     setCategory: (category: any) => void;
+    currentPost: string;
     setCurrentPost: (currentPost: string) => void;
     dummyUpdateSidebar: number;
     hydrateSidebar: () => void;
@@ -43,6 +44,13 @@ const CategorySidebar: React.FC<IProps> = (props: IProps) => {
                     <List.Item
                         key={post?.id}
                         onClick={() => props.setCurrentPost(post?.id)}
+                        style={{
+                            cursor: "pointer",
+                            backgroundColor:
+                                props.currentPost === post?.id
+                                    ? "var(--forum-grey)"
+                                    : "var(--forum-white)",
+                        }}
                     >
                         <List.Item.Meta
                             title={post?.title}

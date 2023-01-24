@@ -34,7 +34,7 @@ const CategorySidebar: React.FC<IProps> = (props: IProps) => {
         <>
             <Menu
                 defaultSelectedKeys={[categoryPath]}
-                style={{ backgroundColor: "var(--forum-white)" }}
+                style={{ backgroundColor: "var(--forum-white)", minWidth: 400 }}
                 items={categories?.map((category) => ({
                     key: category.category,
                     label: (

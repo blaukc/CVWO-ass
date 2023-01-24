@@ -73,18 +73,31 @@ const ForumPost: React.FC<IProps> = (props: IProps) => {
                                     <br />
                                     {localStorage.getItem("user_id") ===
                                         post?.poster && (
-                                        <>
-                                            <a onClick={deletePostHandler}>
-                                                delete
-                                            </a>
-                                            <EditPostModal
-                                                post={post}
-                                                hydrateSidebar={
-                                                    props.hydrateSidebar
-                                                }
-                                                hydratePost={hydratePost}
-                                            />
-                                        </>
+                                        <Row
+                                            justify="space-between"
+                                            align="middle"
+                                            style={{ paddingRight: 60 }}
+                                        >
+                                            <Col>
+                                                {/* {post?.poster} */}
+                                                <br />
+                                                {new Date(
+                                                    post?.date_created
+                                                ).toLocaleString()}
+                                            </Col>
+                                            <Col>
+                                                <a onClick={deletePostHandler}>
+                                                    Delete Post
+                                                </a>
+                                                <EditPostModal
+                                                    post={post}
+                                                    hydrateSidebar={
+                                                        props.hydrateSidebar
+                                                    }
+                                                    hydratePost={hydratePost}
+                                                />
+                                            </Col>
+                                        </Row>
                                     )}
                                 </Col>
                             </>

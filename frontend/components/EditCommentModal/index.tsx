@@ -46,7 +46,9 @@ const EditCommentModal: React.FC<IProps> = (props: IProps) => {
 
     return (
         <>
-            <Row onClick={showModal}>Edit Comment</Row>
+            <Row onClick={showModal}>
+                <a>Edit Comment</a>
+            </Row>
             <Modal
                 title="Edit Comment"
                 open={isModalOpen}

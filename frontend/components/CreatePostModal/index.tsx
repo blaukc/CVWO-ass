@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { Form, Modal, Row } from "antd";
+import { Col, Form, message, Modal, Row, Typography } from "antd";
 import CreatePostForm from "./CreatePostForm";
 import { createPost } from "../../api";
+import { PlusOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router";
+
+const { Text } = Typography;
 
 interface IProps {
     hydrateSidebar: () => void;
@@ -10,9 +14,21 @@ interface IProps {
 const CreatePostModal: React.FC<IProps> = (props: IProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
+    const router = useRouter();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const showModal = () => {
-        setIsModalOpen(true);
+        if (localStorage.getItem("token")) {
+            setIsModalOpen(true);
+        } else {
+            messageApi.open({
+                type: "error",
+                content: "You are not logged in",
+            });
+            setTimeout(() => {
+                router.push("/login");
+            }, 1500);
+        }
     };
 
     const handleOk = () => {
@@ -38,7 +54,25 @@ const CreatePostModal: React.FC<IProps> = (props: IProps) => {
 
     return (
         <>
-            <Row onClick={showModal}>Open Modal</Row>
+            {contextHolder}
+            <Row
+                align="middle"
+                justify="space-between"
+                onClick={showModal}
+                style={{
+                    cursor: "pointer",
+                    width: "100%",
+                    height: "100%",
+                    padding: 10,
+                }}
+            >
+                <Col>
+                    <Text strong>Create a Post</Text>
+                </Col>
+                <Col>
+                    <PlusOutlined />
+                </Col>
+            </Row>
             <Modal
                 title="Create Post"
                 open={isModalOpen}

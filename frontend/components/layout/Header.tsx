@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     AppstoreOutlined,
+    HomeOutlined,
+    LoginOutlined,
+    LogoutOutlined,
     MailOutlined,
+    QuestionCircleOutlined,
     SettingOutlined,
 } from "@ant-design/icons";
-import type { MenuProps } from "antd";
+import { Col, MenuProps, Row } from "antd";
 import { Menu } from "antd";
 import { NextRouter, useRouter } from "next/router";
 import Link from "next/link";
@@ -13,7 +17,7 @@ const items: MenuProps["items"] = [
     {
         label: <Link href="/">Home</Link>,
         key: "",
-        icon: <MailOutlined />,
+        icon: <HomeOutlined />,
     },
     {
         label: <Link href="/general">Forum</Link>,
@@ -23,12 +27,12 @@ const items: MenuProps["items"] = [
     {
         label: <Link href="/about">About</Link>,
         key: "about",
-        icon: <AppstoreOutlined />,
+        icon: <QuestionCircleOutlined />,
     },
     {
         label: <Link href="/login">Login</Link>,
         key: "login",
-        icon: <AppstoreOutlined />,
+        icon: <LoginOutlined />,
     },
 ];
 
@@ -47,19 +51,34 @@ const Header: React.FC = () => {
     const path = getSelectedHeader(router);
     const [current, setCurrent] = useState(path);
 
-    // const onClick: MenuProps["onClick"] = (e) => {
-    //     setCurrent(e.key);
-    //     // router.push(e.key === "forum" ? "/general" : e.key);
-    // };
+    const logout = () => {
+        localStorage.clear();
+        router.push("/login");
+    };
 
     return (
-        <Menu
-            // onClick={onClick}
-            style={{ backgroundColor: "var(--forum-white)" }}
-            selectedKeys={[current]}
-            mode="horizontal"
-            items={items}
-        />
+        <>
+            <Row justify="space-between">
+                <Col md={8}>
+                    <Menu
+                        // onClick={onClick}
+                        style={{
+                            backgroundColor: "var(--forum-white)",
+                            height: "100%",
+                        }}
+                        selectedKeys={[current]}
+                        mode="horizontal"
+                        items={items}
+                    />
+                </Col>
+                <Col>
+                    <Row style={{ height: 20 }}>
+                        {/* i have no time */}
+                        <a onClick={logout}>Logout</a>
+                    </Row>
+                </Col>
+            </Row>
+        </>
     );
 };
 
