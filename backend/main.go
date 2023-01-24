@@ -11,5 +11,5 @@ func main() {
 	mux := http.NewServeMux()
 	routes.CreateRoutes(mux)
 	fmt.Println("starting server")
-	http.ListenAndServe(":54321", mux)
+	http.ListenAndServe("0.0.0.0:54321", mux)
 }
