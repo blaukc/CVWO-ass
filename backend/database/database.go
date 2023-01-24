@@ -56,7 +56,7 @@ func GetRowById(db *sqlx.DB, res any, table string, id string) {
 		WHERE id=$1
 	`, table)
 
-	err := db.Select(res, sqlStatement, id)
+	err := db.Select(res, sqlStatement, SanitizeInput(id))
 	if err != nil {
 		panic(err)
 	}
@@ -73,7 +73,7 @@ func DeleteById(db *sqlx.DB, table string, id string) {
 	sqlStatement := fmt.Sprintf(`
 		DELETE FROM %s
 		WHERE id='%s'
-	`, table, id)
+	`, table, SanitizeInput(id))
 
 	_, err := db.Exec(sqlStatement)
 	if err != nil {
@@ -84,7 +84,7 @@ func DeleteById(db *sqlx.DB, table string, id string) {
 func PatchById(db *sqlx.DB, table string, id string, columns []string, values []string) {
 	var valuesWithQuotes []string
 	for i, value := range values {
-		valuesWithQuotes = append(valuesWithQuotes, fmt.Sprintf("%s='%s'", columns[i], value))
+		valuesWithQuotes = append(valuesWithQuotes, fmt.Sprintf("%s='%s'", columns[i], SanitizeInput(value)))
 	}
 	updateValues := strings.Join(valuesWithQuotes, ", ")
 	sqlStatement := fmt.Sprintf("UPDATE %s SET %s WHERE id='%s'", table, updateValues, id)
@@ -98,7 +98,7 @@ func Insert(db *sqlx.DB, table string, columns []string, values []string) {
 	columnsParsed := strings.Join(columns, ", ")
 	var valuesWithQuotes []string
 	for _, value := range values {
-		valuesWithQuotes = append(valuesWithQuotes, fmt.Sprintf("'%s'", value))
+		valuesWithQuotes = append(valuesWithQuotes, fmt.Sprintf("'%s'", SanitizeInput(value)))
 	}
 	valuesParsed := strings.Join(valuesWithQuotes, ", ")
 	sqlStatement := fmt.Sprintf("INSERT INTO %s (%s) VALUES (%s)", table, columnsParsed, valuesParsed)
@@ -107,4 +107,8 @@ func Insert(db *sqlx.DB, table string, columns []string, values []string) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func SanitizeInput(input string) string {
+	return strings.ReplaceAll(input, "'", "")
 }

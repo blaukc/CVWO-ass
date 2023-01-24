@@ -49,7 +49,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	db := database.Connect()
 
 	var user []models.ForumUsers
-	sqlStatement := fmt.Sprintf("SELECT * FROM forumusers WHERE name='%s'", credentials.Username)
+	sqlStatement := fmt.Sprintf("SELECT * FROM forumusers WHERE name='%s'", database.SanitizeInput(credentials.Username))
 	database.GetRows(db, &user, sqlStatement)
 
 	database.Disconnect(db)
@@ -85,6 +85,20 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Get the new ID
+	db := database.Connect()
+
+	var checkuser []models.ForumUsers
+	sqlStatement := fmt.Sprintf("SELECT * FROM forumusers WHERE name='%s'", database.SanitizeInput(credentials.Username))
+	database.GetRows(db, &checkuser, sqlStatement)
+
+	database.Disconnect(db)
+
+	if len(checkuser) > 0 {
+		http.Error(w, "User already created", http.StatusBadRequest)
+		return
+	}
+
 	hash, err := bcrypt.GenerateFromPassword([]byte(credentials.Password), bcrypt.DefaultCost)
 	if err != nil {
 		panic(err)
@@ -94,7 +108,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	values := []string{credentials.Username, string(hash)}
 	table := "forumusers"
 
-	db := database.Connect()
+	db = database.Connect()
 
 	database.Insert(db, table, columns, values)
 
@@ -104,7 +118,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	db = database.Connect()
 
 	var user []models.ForumUsers
-	sqlStatement := fmt.Sprintf("SELECT * FROM forumusers WHERE name='%s'", credentials.Username)
+	sqlStatement = fmt.Sprintf("SELECT * FROM forumusers WHERE name='%s'", database.SanitizeInput(credentials.Username))
 	database.GetRows(db, &user, sqlStatement)
 
 	database.Disconnect(db)

@@ -17,7 +17,7 @@ func GetCategoryPosts(w http.ResponseWriter, r *http.Request) {
 
 	dbGetCategory := database.Connect()
 
-	err := dbGetCategory.Select(&categoryRes, "SELECT id FROM categories WHERE category=$1", categoryName)
+	err := dbGetCategory.Select(&categoryRes, "SELECT id FROM categories WHERE category=$1", database.SanitizeInput(categoryName))
 	if err != nil {
 		panic(err)
 	}
@@ -27,7 +27,7 @@ func GetCategoryPosts(w http.ResponseWriter, r *http.Request) {
 	db := database.Connect()
 
 	var res []models.Posts
-	sqlStatement := fmt.Sprintf("SELECT * FROM posts WHERE category='%s'", categoryId)
+	sqlStatement := fmt.Sprintf("SELECT * FROM posts WHERE category='%s'", database.SanitizeInput(categoryId))
 	database.GetRows(db, &res, sqlStatement)
 
 	database.Disconnect(db)

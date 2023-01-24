@@ -15,7 +15,7 @@ func GetComment(w http.ResponseWriter, r *http.Request) {
 	db := database.Connect()
 
 	var res []models.Comments
-	database.GetRowById(db, &res, "comments", commentId)
+	database.GetRowById(db, &res, "comments", database.SanitizeInput(commentId))
 
 	database.Disconnect(db)
 	fmt.Println(res)
@@ -33,7 +33,7 @@ func GetCommentsByPost(w http.ResponseWriter, r *http.Request) {
 		ON comments.commenter = forumusers.id
 		WHERE comments.post='%s'
 		ORDER BY date_created`,
-		postId)
+		database.SanitizeInput(postId))
 
 	database.GetRows(db, &res, sqlStatement)
 
