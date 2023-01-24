@@ -11,7 +11,7 @@ import (
 )
 
 func Connect() (db *sqlx.DB) {
-
+	// Uncomment this to dev
 	// env_err := godotenv.Load(".env")
 
 	// if env_err != nil {

@@ -11,7 +11,6 @@ import (
 	"github.com/blaukc/CVWO-ass/backend/database"
 	"github.com/blaukc/CVWO-ass/backend/models"
 	"github.com/golang-jwt/jwt"
-	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -122,11 +121,12 @@ func Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateToken(user_id string) (string, error) {
-	env_err := godotenv.Load(".env")
+	// Uncomment this to dev
+	// env_err := godotenv.Load(".env")
 
-	if env_err != nil {
-		panic(env_err)
-	}
+	// if env_err != nil {
+	// 	panic(env_err)
+	// }
 
 	secret := []byte(os.Getenv("JWT_SECRET"))
 	token := jwt.New(jwt.SigningMethodHS256)
@@ -147,11 +147,12 @@ func CreateToken(user_id string) (string, error) {
 func VerifyToken(endpointHandler func(w http.ResponseWriter, r *http.Request, user_id string)) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.Header["Authorization"] != nil {
-			env_err := godotenv.Load(".env")
+			// Uncomment this to dev
+			// env_err := godotenv.Load(".env")
 
-			if env_err != nil {
-				panic(env_err)
-			}
+			// if env_err != nil {
+			// 	panic(env_err)
+			// }
 
 			secret := []byte(os.Getenv("JWT_SECRET"))
 

@@ -32,9 +32,9 @@ const Home = (): JSX.Element => {
                                         Welcome to my CVWO Forum. <br />
                                         This is a place for NUS students to ask
                                         questions and learn more about their
-                                        faculty. <br />I didn't have much time
-                                        so I did what I could with whatever time
-                                        I had.
+                                        faculty. <br />I didn&apos;t have much
+                                        time so I did what I could with whatever
+                                        time I had.
                                     </p>
                                 </Row>
                             </Col>
