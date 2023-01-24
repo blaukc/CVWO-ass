@@ -1,5 +1,4 @@
 // import { host } from "./ip";
-require("dotenv").config();
 const host = process.env.HOST_IP;
 const axios = require("axios");
 
