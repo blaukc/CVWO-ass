@@ -6,10 +6,7 @@ services:
         build: .
         ports: 
             - 54321:54321
-<<<<<<< HEAD
-=======
         extra_hosts:
             - "host.docker.internal:host-gateway"
         restart: always   
->>>>>>> fc78a5e5cf4522b78e7998707b0737a09eb07814
 
