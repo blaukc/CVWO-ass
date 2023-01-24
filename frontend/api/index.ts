@@ -1,5 +1,5 @@
 // import { host } from "./ip";
-const host = process.env.BACKEND_HOST;
+const host = process.env.NEXT_PUBLIC_HOST_IP;
 const axios = require("axios");
 
 export const Get = async (path: string) => {
