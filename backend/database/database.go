@@ -7,17 +7,16 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
 func Connect() (db *sqlx.DB) {
 
-	env_err := godotenv.Load(".env")
+	// env_err := godotenv.Load(".env")
 
-	if env_err != nil {
-		panic(env_err)
-	}
+	// if env_err != nil {
+	// 	panic(env_err)
+	// }
 
 	host := os.Getenv("DB_host")
 	port, _ := strconv.Atoi(os.Getenv("DB_port"))
