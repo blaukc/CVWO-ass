@@ -49,6 +49,10 @@ const CreatePostModal: React.FC<IProps> = (props: IProps) => {
             // We trigger an update to the posts sidebar
             props.hydrateSidebar();
         } else {
+            messageApi.open({
+                type: "error",
+                content: "Error creating post",
+            });
         }
     };
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Modal, Row } from "antd";
+import { Form, message, Modal, Row } from "antd";
 import EditPostForm from "./EditPostForm";
 import { createPost, patchPost } from "../../api";
 import { IPosts } from "../../interfaces/api";
@@ -13,6 +13,7 @@ interface IProps {
 const EditPostModal: React.FC<IProps> = (props: IProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -41,11 +42,16 @@ const EditPostModal: React.FC<IProps> = (props: IProps) => {
             props.hydrateSidebar();
             props.hydratePost();
         } else {
+            messageApi.open({
+                type: "error",
+                content: "Error editing post",
+            });
         }
     };
 
     return (
         <>
+            {contextHolder}
             <Row onClick={showModal}>
                 <a>Edit Post</a>
             </Row>

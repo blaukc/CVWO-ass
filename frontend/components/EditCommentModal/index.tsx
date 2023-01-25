@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Modal, Row } from "antd";
+import { Form, message, Modal, Row } from "antd";
 import EditCommentForm from "./EditCommentForm";
 import { createPost, patchComment } from "../../api";
 import { IComments } from "../../interfaces/api";
@@ -12,6 +12,7 @@ interface IProps {
 const EditCommentModal: React.FC<IProps> = (props: IProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -40,12 +41,17 @@ const EditCommentModal: React.FC<IProps> = (props: IProps) => {
                 // We trigger an update to the posts sidebar
                 props.hydratePost();
             } else {
+                messageApi.open({
+                    type: "error",
+                    content: "Error editing comment",
+                });
             }
         }
     };
 
     return (
         <>
+            {contextHolder}
             <Row onClick={showModal}>
                 <a>Edit Comment</a>
             </Row>

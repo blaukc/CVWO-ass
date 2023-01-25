@@ -11,13 +11,6 @@ import (
 )
 
 func Connect() (db *sqlx.DB) {
-	// Uncomment this to dev
-	// env_err := godotenv.Load(".env")
-
-	// if env_err != nil {
-	// 	panic(env_err)
-	// }
-
 	host := os.Getenv("DB_host")
 	port, _ := strconv.Atoi(os.Getenv("DB_port"))
 	user := os.Getenv("DB_user")

@@ -8,6 +8,11 @@ import (
 )
 
 func main() {
+	// env_err := godotenv.Load(".env")
+
+	// if env_err != nil {
+	// 	panic(env_err)
+	// }
 	mux := http.NewServeMux()
 	routes.CreateRoutes(mux)
 	fmt.Println("starting server")

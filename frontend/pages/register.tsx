@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row } from "antd";
+import { Button, Col, Form, Input, message, Row } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { register } from "../api";
@@ -7,6 +7,7 @@ import HomeLayout from "../components/layout/HomeLayout";
 const Home = (): JSX.Element => {
     const [form] = Form.useForm();
     const router = useRouter();
+    const [messageApi, contextHolder] = message.useMessage();
 
     const onFinish = async (values: any) => {
         const res = await register(values?.username, values?.password);
@@ -17,11 +18,16 @@ const Home = (): JSX.Element => {
             router.push("/general");
         } else {
             //fail prompt
+            messageApi.open({
+                type: "error",
+                content: "Username already used",
+            });
         }
     };
 
     return (
         <>
+            {contextHolder}
             <HomeLayout
                 body={
                     <Row

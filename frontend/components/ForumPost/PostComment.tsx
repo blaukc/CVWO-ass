@@ -26,6 +26,10 @@ const PostComment: React.FC<IProps> = (props: IProps) => {
                 // We trigger an update to the post
                 props.hydratePost();
             } else {
+                messageApi.open({
+                    type: "error",
+                    content: "Error posting comment",
+                });
             }
         } else {
             messageApi.open({
