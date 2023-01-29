@@ -34,7 +34,12 @@ const Home = (): JSX.Element => {
                                         questions and learn more about their
                                         faculty. <br />I didn&apos;t have much
                                         time so I did what I could with whatever
-                                        time I had.
+                                        time I had. <br />
+                                        <b>
+                                            Also backend is hosted on render so
+                                            it may take a while to start running
+                                            🤡
+                                        </b>
                                     </p>
                                 </Row>
                             </Col>
